@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useHistory, Route, Switch, useLocation } from 'react-router-dom';
-import { HomePage, LoginPage, SignUpPage, ProfilePage } from './pages';
+import { HomePage, LoginPage, SignUpPage, ProfilePage, UserPage } from './pages';
 // import Navbar from 'react-bootstrap/Navbar';
 import Navbar from './components/Navbar';
 import Nav from 'react-bootstrap/Nav';
@@ -33,10 +33,11 @@ function App() {
     <div className="d-flex flex-column h-100 align-content-stretch">
       <Navbar userId={userId} onLogout={() => setUserId(null)}/>
       <Switch>
-        <Route path='/' component={HomePage} exact/>
-        <Route path='/login' component={LoginPage}/>
-        <Route path='/signup' component={SignUpPage}/>
-        <Route path='/profile' component={ProfilePage}/>
+        <Route path='/' exact><HomePage/></Route>
+        <Route path='/login'><LoginPage/></Route>
+        <Route path='/signup'><SignUpPage/></Route>
+        <Route path='/profile'><ProfilePage/></Route>
+        <Route path='/users/:id'><UserPage/></Route>
       </Switch>
     </div>
   )

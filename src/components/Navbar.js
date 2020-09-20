@@ -19,11 +19,11 @@ export default function({userId, onLogout}) {
     <Navbar bg="dark" variant="dark" expand="lg" className="shadow">
       <Navbar.Brand as={Link} to="/">Ankiboards</Navbar.Brand>
       <Nav 
-        className="mr-auto" 
+        className="mr-auto flex-row" 
         style={{fontSize: '1.25rem'}} 
         activeKey={history.location.pathname} 
       >
-        <Nav.Item>
+        <Nav.Item className="pr-3">
           <Nav.Link as={Link} to="/profile" eventKey="/profile">Profile</Nav.Link>
         </Nav.Item>
         <Nav.Item>

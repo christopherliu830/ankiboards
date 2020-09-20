@@ -46,8 +46,15 @@ router.post('/search', (req, res, next) => {
   const { query } = req.body;
   const re = new RegExp('^' + query);
   UserModel.find({username: re}).limit(5).lean().exec((err, users) => {
-    const ret = users.map(user => { return {username: user.username}})
+    const ret = users.map(user => { return {username: user.username, _id: user._id}})
     res.status(200).json(ret);
+  })
+});
+
+router.get('/user/:id', (req, res, next) => {
+  UserModel.findById(req.params._id).lean().exec((err, user) => {
+    if (err) return res.status(404).send("The user could not be found");
+    res.status(200).json(user);
   })
 });
 

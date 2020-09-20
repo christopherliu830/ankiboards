@@ -3,6 +3,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import Row from 'react-bootstrap/Row';
 import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
+import LoadingContainer from '../components/LoadingContainer';
 
 export default function(props) {
   const [ user, setProfileInfo ] = useState(null);
@@ -18,18 +19,7 @@ export default function(props) {
     })
   }, []);
 
-  if (!user) return (
-    <Container fluid className="h-100 d-flex flex-column align-items-center justify-content-center">
-      <Row>
-        <Col>
-          <Spinner animation="border" role="status">
-            <span className="sr-only">Loading...</span>
-          </Spinner>
-        </Col>
-      </Row>
-    </Container>
-  )
-
+  if (!user) return <LoadingContainer/>
   return (
     <Container fluid className="h-100 d-flex flex-column m-5">
       <Row className="mb-2">

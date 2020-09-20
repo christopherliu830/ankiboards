@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -10,10 +11,10 @@ import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 export default function() {
   const [ query, setQuery ] = useState('');
-  const [ searchField, setSearchField ] = useState('');
   const [ loading, setLoading ] = useState(false);
   const [ suggestions, setSuggestions ] = useState([]);
   const [ selected, setSelected ] = useState([]);
+  const history = useHistory();
 
   const handleSearch = (value) => {
     setLoading(true);
@@ -30,6 +31,7 @@ export default function() {
       if (response.ok) return response.json();
     })
     .then(data => {
+      console.log(data);
       setSuggestions(data);
       setLoading(false);
     })
@@ -38,8 +40,8 @@ export default function() {
 
   const handleSubmit = e => {
     e.preventDefault();
-    if (selected.length > 0) return console.log(selected[0]);
-    console.log(query)
+    if (selected.length > 0) return history.push(`/users/${(selected[0]._id)}`);
+    console.log("User not found");
   }
 
   return (
