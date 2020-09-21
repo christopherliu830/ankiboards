@@ -5,6 +5,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import 'crypto-js';
 
 export default function() {
   const [ userInfo, updateUserInfo ] = useState({
@@ -15,6 +16,14 @@ export default function() {
   const [ success, setSuccess ] = useState(null);
   const [ errorMsg, setErrorMsg ] = useState('');
 
+  const generateStateVariable = () => {
+    const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let array = new Uint8Array(32);
+    window.crypto.getRandomValues(array);
+    array = array.map(x => possible.charCodeAt(x % possible.length));
+    const randomState = String.fromCharCode.apply(null, array);
+  }
+
   const handleInfoChange = obj => {
     updateUserInfo({
       ...userInfo,
@@ -24,8 +33,9 @@ export default function() {
 
   const handleSubmit = e => {
     const { uname, pword } = userInfo;
+
     e.preventDefault();
-    fetch(process.env.REACT_APP_API + '/login', {
+    fetch(process.env.REACT_APP_API + 'login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

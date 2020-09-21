@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Link, useHistory, Route, Switch, useLocation } from 'react-router-dom';
 import { HomePage, LoginPage, SignUpPage, ProfilePage, UserPage } from './pages';
 // import Navbar from 'react-bootstrap/Navbar';
@@ -37,7 +37,7 @@ function App() {
         <Route path='/login'><LoginPage/></Route>
         <Route path='/signup'><SignUpPage/></Route>
         <Route path='/profile'><ProfilePage/></Route>
-        <Route path='/users/:id'><UserPage/></Route>
+        <Route path='/user/:id'><UserPage/></Route>
       </Switch>
     </div>
   )

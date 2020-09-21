@@ -9,7 +9,7 @@ export default function(props) {
   const [ user, setProfileInfo ] = useState(null);
 
   useEffect(() => {
-    fetch(process.env.REACT_APP_API + '/profile', {
+    fetch(process.env.REACT_APP_API + 'profile', {
       credentials: 'include',
     }).then(response => {
       if (response.ok) return response.json();

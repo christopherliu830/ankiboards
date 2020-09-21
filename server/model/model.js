@@ -3,13 +3,12 @@ const bcrypt = require('bcrypt');
 const Schema = mongoose.Schema;
 const passportLocalMongoose = require('passport-local-mongoose');
 
-
-const AnkiInfoSchema = new Schema({
-  cardsStudied : {
-    type : Number,
-    default: 0,
-  },
-});
+const OAuthClient = new Schema({
+  clientId: {type: String, required: true},
+  clientSecret: {type: String, required: true},
+  redirectUris: {type: Array},
+  grants: {type: Array, default: ['client_credentials']},
+}, {_id: true});
 
 const UserSchema = new Schema({
   email : {
@@ -27,10 +26,16 @@ const UserSchema = new Schema({
     unique: true,
   },
   ankiInfo: {
-    type : AnkiInfoSchema,
-    default: {}
-  }
+    cardsStudied: {
+      type: Number,
+      default: 0,
+    }
+  },
+  oauth2clients: {
+    type: [OAuthClient],
+  },
 });
+
 UserSchema.pre('save', async function(next) {
   const user = this;
   const hash = await bcrypt.hash(user.password, 10);
@@ -43,5 +48,18 @@ UserSchema.methods.isValidPassword = async function(password) {
   return compare;
 }
 
-module.exports = mongoose.model('ankiInfo', AnkiInfoSchema);
-module.exports = mongoose.model('user', UserSchema);
+const OAuthToken = new Schema({
+  accessToken: {type: String},
+  accessTokenExpiresAt: {type: Date},
+  refreshToken: {type: String},
+  refreshTokenExpresAt: {type: Date},
+  scope: {type: String},
+  client: {type: Object},
+  user: {type: Object},
+});
+
+
+
+module.exports.OAuthTokenModel = mongoose.model('OAuthTokenModel', OAuthToken);
+module.exports.OAuthClientModel = mongoose.model('OAuthClientModel', OAuthClient);
+module.exports.UserModel = mongoose.model('UserModel', UserSchema);

@@ -76,7 +76,7 @@ export default function() {
             </Form.Group>
             <Form.Group>
               <Form.Label>Email</Form.Label>
-              <Form.Control type="text" 
+              <Form.Control type="email" 
                 placeholder="penguin2squishy@gmail.com" 
                 value={userInfo.email} 
                 onChange={e => handleInfoChange({email: e.target.value})}

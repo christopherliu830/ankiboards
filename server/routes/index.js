@@ -2,7 +2,7 @@ const express = require('express');
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
-const UserModel = require('../model/model');
+const UserModel = require('../model/model').UserModel;
 
 /* GET home page. */
 router.get('/', function(req, res) {
@@ -11,7 +11,7 @@ router.get('/', function(req, res) {
 
 router.post('/signup', async (req, res, next) => {
   const { email, username, password } = req.body;
-  await UserModel.create({email, username, password}, (err, user) => {
+  UserModel.create({email, username, password}, (err, user) => {
     if (err) return res.status(500).json({message: 'Error creating user'});
     res.status(200).json({
       message : 'Signup successful',
@@ -23,7 +23,6 @@ router.post('/login', async (req, res, next) => {
   passport.authenticate('local', {session: false}, async (err, user, info) => {
     try {
       if (err || !user) {
-        console.log(info);
         return res.status(404).send('User Not Found');
       }
       req.login(user, { session : false }, async error => {
@@ -45,15 +44,23 @@ router.post('/login', async (req, res, next) => {
 router.post('/search', (req, res, next) => {
   const { query } = req.body;
   const re = new RegExp('^' + query);
-  UserModel.find({username: re}).limit(5).lean().exec((err, users) => {
-    const ret = users.map(user => { return {username: user.username, _id: user._id}})
-    res.status(200).json(ret);
+  UserModel.find({username: re}, 'username').limit(5).lean().exec((err, users) => {
+    res.status(200).json(users);
   })
 });
 
-router.get('/user/:id', (req, res, next) => {
-  UserModel.findById(req.params._id).lean().exec((err, user) => {
-    if (err) return res.status(404).send("The user could not be found");
+router.post('/search-by-username', (req, res, next) => {
+  const { query } = req.body;
+  UserModel.findOne({username: query}, 'username').lean().exec((err, user) => {
+    if (err) return res.status(500);
+    res.status(200).json(user);
+  })
+});
+
+router.get('/user/:id', async (req, res, next) => {
+  UserModel.findById(req.params.id, 'username ankiInfo').exec((err, user) => {
+    if (err) return res.status(500).send("Error occurred finding user");
+    console.log(user);
     res.status(200).json(user);
   })
 });
