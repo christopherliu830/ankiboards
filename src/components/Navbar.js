@@ -1,17 +1,19 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useHistory, Route, Switch, useLocation } from 'react-router-dom';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import Button from 'react-bootstrap/Button';
 import Cookies from 'js-cookie';
+import { useAuth } from '../behaviors/use-auth';
 
 export default function({userId, onLogout}) {
   const history = useHistory();
+  const [user, setUser] = useState(null);
+  const auth = useAuth();
 
   const handleSignOut = e => {
     e.preventDefault();
-    if (Cookies.get('header.payload')) Cookies.remove('header.payload');
-    onLogout();
+    auth.signout();
     history.push('/');
   }
 
@@ -31,9 +33,9 @@ export default function({userId, onLogout}) {
         </Nav.Item>
       </Nav>
       <Navbar.Collapse className="justify-content-end">
-        { userId ? 
+        { auth.user ? 
           <div>
-            <Navbar.Text>Signed in as: <span className="text-light mr-2">{userId}</span></Navbar.Text>
+            <Navbar.Text>Signed in as: <span className="text-light mr-2">{auth.user.displayName}</span></Navbar.Text>
             <Button variant="primary" href="/" onClick={handleSignOut}>Logout</Button>
           </div> :
           <>

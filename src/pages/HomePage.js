@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Button from 'react-bootstrap/Button';
+import LoadingButton from '../components/LoadingButton';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Spinner from 'react-bootstrap/Spinner';
@@ -99,9 +99,9 @@ export default function() {
                   useCache={false}
                 />
                 <InputGroup.Append>
-                    <Button type="submit" variant={"dark"} style={{ minWidth:"80px" }}disabled={submitted}>
-                      {submitted ? <Spinner as="span" animation="border" size="sm" role="status"/> : 'Search'}
-                    </Button>
+                    <LoadingButton loaded={!submitted} type="submit" variant={"dark"} style={{ minWidth:"80px" }}>
+                      Search
+                    </LoadingButton>
                 </InputGroup.Append>
               </InputGroup>
             </Form.Group>

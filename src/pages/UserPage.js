@@ -1,26 +1,27 @@
 import React, { useEffect, useState } from 'react';
-import Spinner from 'react-bootstrap/Spinner';
+import { useParams } from 'react-router-dom';
 import Row from 'react-bootstrap/Row';
 import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
-import LoadingContainer from '../components/LoadingContainer';
+import {withLoading} from '../components/LoadingContainer';
 
-export default function(props) {
+export default function ({ match }) {
+  const params = useParams();
+  const queryId = params.id;
   const [ user, setProfileInfo ] = useState(null);
 
   useEffect(() => {
-    fetch(process.env.REACT_APP_API + 'profile', {
-      credentials: 'include',
-    }).then(response => {
+    fetch(process.env.REACT_APP_API + `/user/${queryId}`).then( response => {
       if (response.ok) return response.json();
-    }).then(data => {
+    })
+    .then(data => {
       console.log(data);
       setProfileInfo(data);
     })
+    .catch(err => console.log(err))
   }, []);
 
-  if (!user) return <LoadingContainer/>
-  return (
+  return ( 
     <Container fluid className="h-100 d-flex flex-column m-5">
       <Row className="mb-2">
         <h1>{user.username}</h1>
@@ -29,5 +30,5 @@ export default function(props) {
         <h4>Cards studied: {user.ankiInfo.cardsStudied}</h4>
       </Row>
     </Container>
-  );
+  )
 }

@@ -5,6 +5,8 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import * as firebase from 'firebase/app';
+import 'firebase/auth';
 
 export default function() {
   const [ userInfo, updateUserInfo ] = useState({
@@ -28,36 +30,43 @@ export default function() {
     });
   }
 
+  // const handleSubmit = e => {
+  //   e.preventDefault();
+  //   if (userInfo.pword !== userInfo.reEnterPword) {
+  //     setErrorMsg({reEnterPword: "Your passwords don't match!"});
+  //     return;
+  //   }
+  //   setErrorMsg({
+  //     uname: '',
+  //     email: '',
+  //     pword: '',
+  //     reEnterPword: '',
+  //   });
+
+  //   const { uname, email, pword } = userInfo;
+  //   fetch(process.env.REACT_APP_API + '/signup', {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     credentials: 'include',
+  //     body: JSON.stringify({username: uname, email: email, password: pword}),
+  //   }).then(response => {
+  //     console.log(response);
+  //     if (response.status === 404) {
+  //       throw new Error("User Not Found!")
+  //     }
+  //     setSuccess(true);
+  //   })
+  //   .then(data => console.log(data))
+  //   .catch(error => console.log(error));
+  // }
+
   const handleSubmit = e => {
     e.preventDefault();
-    if (userInfo.pword !== userInfo.reEnterPword) {
-      setErrorMsg({reEnterPword: "Your passwords don't match!"});
-      return;
-    }
-    setErrorMsg({
-      uname: '',
-      email: '',
-      pword: '',
-      reEnterPword: '',
-    });
-
-    const { uname, email, pword } = userInfo;
-    fetch(process.env.REACT_APP_API + '/signup', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-      body: JSON.stringify({username: uname, email: email, password: pword}),
-    }).then(response => {
-      console.log(response);
-      if (response.status === 404) {
-        throw new Error("User Not Found!")
-      }
-      setSuccess(true);
-    })
-    .then(data => console.log(data))
-    .catch(error => console.log(error));
+    console.log(userInfo);
+    firebase.auth().createUserWithEmailAndPassword(userInfo.email, userInfo.pword)
+    .catch(err => console.log(err));
   }
 
   if (success) return <Redirect to="/"/>
