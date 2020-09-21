@@ -1,6 +1,7 @@
 const passport = require('passport');
 const localStrategy = require('passport-local').Strategy;
-const UserModel = require('../model/model');
+const BearerStrategy = require('passport-http-bearer').Strategy;
+const UserModel = require('../model/model').UserModel;
 
 //Create a passport middleware to handle user registration
 passport.use('signup', new localStrategy({
@@ -64,3 +65,14 @@ passport.use(new JWTStrategy({
     done(error);
   }
 }));
+
+passport.use('oauth', new BearerStrategy(
+  function(token, done) {
+    console.log(token);
+    UserModel.findOne({ _id: token}, function (err, client) {
+        if (err) { return done(err); }
+        if (!client) { return done(null, false); }
+        return done(null, client);
+    });
+  }, 
+));
