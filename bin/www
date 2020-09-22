@@ -3,14 +3,13 @@
 /**
  * Module dependencies.
  */
-require('path');
-require('dotenv').config({ path: path.resolve(__dirname, `../config/${process.env.ENVIRONMENT}.env`)});
+const path = require('path');
+require('dotenv').config();
 
 
 var app = require('../app');
 var debug = require('debug')('server:server');
 var http = require('http');
-const { path } = require('../app');
 
 /**
  * Get port from environment and store in Express.

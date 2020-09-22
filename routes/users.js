@@ -7,4 +7,14 @@ router.get('/profile', async (req, res, next) => {
   res.json({username, email, ankiInfo});
 });
 
+router.post('/profile-name', async (req, res, next) => {
+  const uid = req.body.firebaseUid;
+  const name = req.body.name;
+  console.log(name);
+  UserModel.findOne({firebaseUid: uid}, (err, user) => {
+    user.update({username: name});
+    res.status(200).send("Success");
+  })
+})
+
 module.exports = router;
