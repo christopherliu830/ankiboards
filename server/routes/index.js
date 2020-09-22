@@ -10,11 +10,14 @@ router.get('/', function(req, res) {
 });
 
 router.post('/signup', async (req, res, next) => {
-  const { email, username, password } = req.body;
-  UserModel.create({email, username, password}, (err, user) => {
-    if (err) return res.status(500).json({message: 'Error creating user'});
-    res.status(200).json({
-      message : 'Signup successful',
+  const { firebaseUid, username } = req.body;
+  UserModel.create({username, firebaseUid}, (err, user) => {
+    if (err) { 
+      if (err.code === 11000) return res.status(409).json({ message: 'User already exists'});
+      else return res.status(200).json({message: 'Error creating user'})
+    }
+    res.status(201).json({
+      message : 'Created',
     });
   });
 });

@@ -3,12 +3,8 @@ import { Link, useHistory, Route, Switch, useLocation } from 'react-router-dom';
 import { HomePage, LoginPage, SignUpPage, ProfileSettingsPage, UserPage } from './pages';
 // import Navbar from 'react-bootstrap/Navbar';
 import Navbar from './components/Navbar';
-import Nav from 'react-bootstrap/Nav';
-import Button from 'react-bootstrap/Button';
 import Cookies from 'js-cookie';
-import jwt from 'jsonwebtoken';
 import './App.css';
-
 
 function App() {
   const [userId, setUserId] = useState(null);

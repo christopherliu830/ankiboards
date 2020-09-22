@@ -50,7 +50,9 @@ package-lock.json
 # firebase
 .firebaserc
 firebase.json
-service-account-file.json
+firebase-config.json
+firebase-token.js
+service-account.json
 
 # Coveralls
 coverage
