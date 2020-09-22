@@ -3,23 +3,30 @@ const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
 const UserModel = require('../model/model').UserModel;
+const bcrypt = require('bcrypt');
 
 /* GET home page. */
 router.get('/', function(req, res) {
   res.send('this is the api');
 });
 
+router.get('/test', async function(req, res) {
+  console.log(await UserModel.find());
+  const random = require('crypto').randomBytes(48, (err, buffer) => {
+    var token = buffer.toString('hex');
+    console.log(token);
+    new UserModel({username: token, firebaseUid: token}).save()
+      .then(() => res.status(201).json({message: 'Created'}))
+      .catch(err => console.log(err))
+  })
+})
+
 router.post('/signup', async (req, res, next) => {
   const { firebaseUid, username } = req.body;
-  UserModel.create({username, firebaseUid}, (err, user) => {
-    if (err) { 
-      if (err.code === 11000) return res.status(409).json({ message: 'User already exists'});
-      else return res.status(200).json({message: 'Error creating user'})
-    }
-    res.status(201).json({
-      message : 'Created',
-    });
-  });
+  console.log(firebaseUid, username);
+  new UserModel({username, firebaseUid}).save()
+    .catch(err => res.status(409).json({message: 'User already exists'}))
+    .then(res.status(201).json({message: 'Created'}));
 });
 
 router.post('/login', async (req, res, next) => {

@@ -10,11 +10,12 @@ import { useAuth } from '../behaviors/use-auth';
 function ProfileSettingsPage(props) {
   const auth = useAuth();
   const [ username, setUsername ] = useState('');
+  const [ json, setJson ] = useState('');
 
   const fetchProfileData = useCallback(async () => {
     const token = await auth.user.getIdToken(true);
     return (
-      fetch(process.env.REACT_APP_API, {
+      fetch(process.env.REACT_APP_API + '/profile', {
         headers: {
           'Authorization' : `Bearer ${token}`,
         }
@@ -35,6 +36,8 @@ function ProfileSettingsPage(props) {
   const handleSubmit = useCallback(async e => {
     e.preventDefault();
     const token = await auth.user.getIdToken(true);
+
+    // Update on backend
     fetch(process.env.REACT_APP_API + '/profile-name', {
       method: 'POST',
       headers: {
@@ -43,6 +46,8 @@ function ProfileSettingsPage(props) {
       }, 
       body: await new URLSearchParams({username: username}).toString(),
     });
+
+    // Update on firebase. TODO: move this to backend!
     auth.user.updateProfile({
       displayName: username,
     })

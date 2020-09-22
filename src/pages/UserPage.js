@@ -24,10 +24,10 @@ export default function ({ match }) {
   return ( 
     <Container fluid className="h-100 d-flex flex-column m-5">
       <Row className="mb-2">
-        <h1>{user.username}</h1>
+        <h1>{user && user.username}</h1>
       </Row>
       <Row>
-        <h4>Cards studied: {user.ankiInfo.cardsStudied}</h4>
+        <h4>Cards studied: {user && user.ankiInfo.cardsStudied}</h4>
       </Row>
     </Container>
   )

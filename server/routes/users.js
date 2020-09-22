@@ -4,16 +4,17 @@ const UserModel = require('../model/model').UserModel;
 
 router.get('/profile', async (req, res, next) => {
   const {username, email, ankiInfo} = await UserModel.findById(req.user._id).lean().exec();
-  res.json({username, email, ankiInfo});
+  res.status(200).json({username, email, ankiInfo});
 });
 
 router.post('/profile-name', async (req, res, next) => {
-  const uid = req.body.firebaseUid;
-  const name = req.body.name;
-  console.log(name);
-  UserModel.findOne({firebaseUid: uid}, (err, user) => {
-    user.update({username: name});
-    res.status(200).send("Success");
+  const name = req.body.username;
+  UserModel.findById({_id: req.user._id}, (err, user) => {
+    user.username = name;
+    user.save()
+      .then(() => {
+        res.status(200).send("Success");
+      });
   })
 })
 

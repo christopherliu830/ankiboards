@@ -57,7 +57,7 @@ export default function() {
     auth.signup(email.value, pword.value)
       .then(user => {
         console.log('firebase account created...');
-        user.updateProfile({ displayName: username, });
+        user.updateProfile({ displayName: username.value, });
         signupRequest(user);
       })
       .then(() => history.push('/'))
@@ -71,7 +71,6 @@ export default function() {
             pwordPair[1]({...pword, error: err.message});
             break;
         }
-        console.log('ERROR', err);
       })
       .then(() => {
         setLoading(false);
@@ -81,16 +80,21 @@ export default function() {
   const signupRequest = async user => {
     const params = new URLSearchParams({
       firebaseUid: user.uid,
-      username: username,
+      username: username.value,
     });
+    const str = params.toString();
+    console.log(str);
     return fetch(process.env.REACT_APP_API + '/signup', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: params.toString(),
+      body: str,
     })
-    .catch(err => err.json())
+    .catch(async err => {
+      const j = await err.json();
+      console.log(j);
+    })
     .then(data => console.log(data));
   }
 
