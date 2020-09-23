@@ -23,7 +23,7 @@ function App() {
         <Route path='/' exact><HomePage/></Route>
         <Route path='/login'><LoginPage/></Route>
         <Route path='/signup'><SignUpPage/></Route>
-        <Route path='/profile'><ProfileSettingsPage/></Route>
+        <Route path='/profile'><></></Route> {/* Under Construction! */}
         <Route path='/user/:id'><UserPage/></Route>
       </Switch>
     </div>

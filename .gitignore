@@ -48,6 +48,7 @@ package-lock.json
 *.gz
 
 # firebase
+.firebase/
 .firebaserc
 firebase.json
 firebase-config.json
