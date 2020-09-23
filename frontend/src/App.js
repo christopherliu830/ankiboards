@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Link, useHistory, Route, Switch, useLocation } from 'react-router-dom';
-import { HomePage, LoginPage, SignUpPage, ProfileSettingsPage, UserPage } from './pages';
+import * as pages from './pages';
 // import Navbar from 'react-bootstrap/Navbar';
 import Navbar from './components/Navbar';
 import Cookies from 'js-cookie';
@@ -20,11 +20,12 @@ function App() {
     <div className="d-flex flex-column h-100 align-content-stretch">
       <Navbar userId={userId} onLogout={() => setUserId(null)}/>
       <Switch>
-        <Route path='/' exact><HomePage/></Route>
-        <Route path='/login'><LoginPage/></Route>
-        <Route path='/signup'><SignUpPage/></Route>
-        <Route path='/profile'><></></Route> {/* Under Construction! */}
-        <Route path='/user/:id'><UserPage/></Route>
+        <Route path='/' exact><pages.HomePage/></Route>
+        <Route path='/login'><pages.LoginPage/></Route>
+        <Route path='/signup'><pages.SignUpPage/></Route>
+        <Route path='/profile'><pages.ProfileSettingsPage/></Route> {/* Under Construction! */}
+        <Route path='/profile'><pages.AboutPage/></Route> {/* Under Construction! */}
+        <Route path='/user/:id'><pages.UserPage/></Route>
       </Switch>
     </div>
   )

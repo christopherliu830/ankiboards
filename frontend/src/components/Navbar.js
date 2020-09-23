@@ -29,7 +29,7 @@ export default function({userId, onLogout}) {
           <Nav.Link as={Link} to="/profile" eventKey="/profile">Profile</Nav.Link>
         </Nav.Item>
         <Nav.Item>
-          <Nav.Link as={Link} to="/test" eventKey="/test">Profile</Nav.Link>
+          <Nav.Link as={Link} to="/about" eventKey="/about">About</Nav.Link>
         </Nav.Item>
       </Nav>
       <Navbar.Collapse className="justify-content-end">

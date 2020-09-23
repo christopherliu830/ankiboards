@@ -10,7 +10,6 @@ import { useAuth } from '../behaviors/use-auth';
 function ProfileSettingsPage(props) {
   const auth = useAuth();
   const [ username, setUsername ] = useState('');
-  const [ json, setJson ] = useState('');
 
   const fetchProfileData = useCallback(async () => {
     const token = await auth.user.getIdToken(true);
@@ -33,27 +32,20 @@ function ProfileSettingsPage(props) {
     }
   }, [auth.user])
 
-  const handleSubmit = useCallback(async e => {
-    e.preventDefault();
-    const token = await auth.user.getIdToken(true);
-
-    // Update on backend
-    fetch(process.env.REACT_APP_API + '/profile-name', {
+  const handleSync = useCallback(() => {
+    const testAction = {
+      action: 'deckNames',
+      version: 6
+    };
+    console.log(process.env.REACT_APP_ANKI_API);
+    fetch(process.env.REACT_APP_ANKI_API, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Authorization': `Bearer ${token}`,
-      }, 
-      body: await new URLSearchParams({username: username}).toString(),
-    });
-
-    // Update on firebase. TODO: move this to backend!
-    auth.user.updateProfile({
-      displayName: username,
+      body: JSON.stringify(testAction),
     })
-    .then(() => console.log('success', auth.user.displayName))
-    .catch(err => console.log(err));
-  });
+      .then(response => response.json())
+      .then(data => console.log(data))
+      .catch(err => console.log(err))
+  })
 
   return (
     <Container 
@@ -63,17 +55,9 @@ function ProfileSettingsPage(props) {
     >
       <Row className="mb-2">
         <Col>
-          <Form>
-            <Form.Text>Cards studied: </Form.Text>
-            <Form.Group>
-              <Form.Control 
-                type="text" 
-                placeholder={"ass"}
-                value={username} 
-                onChange={e => setUsername(e.target.value)}
-              />
-            </Form.Group>
-            <Button onClick={handleSubmit}>click me</Button>
+          <Form inline>
+            <Form.Text>Sync your Anki data: </Form.Text>
+            <Button onClick={handleSync}>click me</Button>
           </Form>
         </Col>
       </Row>
