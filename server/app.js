@@ -5,11 +5,8 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var secureRouter = require('./routes/users');
-var oauthRouter = require('./routes/oauth');
 var cors = require('cors');
 const mongoose = require('mongoose');
-const {Request, Response} = require('oauth2-server');
-const OAuthModel = require('./model/oauth2model');
 const admin = require('firebase-admin');
 
 admin.initializeApp({

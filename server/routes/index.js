@@ -2,12 +2,12 @@ const express = require('express');
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
+const admin = require('firebase-admin')
 const UserModel = require('../model/model').UserModel;
-const bcrypt = require('bcrypt');
 
 /* GET home page. */
 router.get('/', function(req, res) {
-  res.send('this is the api');
+  res.render('index');
 });
 
 router.get('/test', async function(req, res) {
@@ -22,11 +22,25 @@ router.get('/test', async function(req, res) {
 })
 
 router.post('/signup', async (req, res, next) => {
-  const { firebaseUid, username } = req.body;
-  console.log(firebaseUid, username);
-  new UserModel({username, firebaseUid}).save()
-    .catch(err => res.status(409).json({message: 'User already exists'}))
-    .then(res.status(201).json({message: 'Created'}));
+  const { username, password, email } = req.body;
+  admin.auth().createUser({
+    email,
+    displayName: username,
+    password: password,
+  })
+    .then(userRecord => {
+      return new UserModel({
+        username: username, firebaseUid: userRecord.uid
+      }).save();
+    })
+    .then(() => {
+      console.log('Successful');
+      res.status(201).send();
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).send(err);
+    });
 });
 
 router.post('/login', async (req, res, next) => {
