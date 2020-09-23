@@ -52,7 +52,6 @@ package-lock.json
 .firebaserc
 firebase.json
 firebase-config.json
-firebase-token.js
 service-account.json
 
 # Coveralls
