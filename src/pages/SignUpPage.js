@@ -53,34 +53,15 @@ export default function() {
 
   const handleSubmit = e => {
     e.preventDefault();
-    setLoading(true);
-    auth.signup(email.value, pword.value)
-      .then(user => {
-        console.log('firebase account created...');
-        user.updateProfile({ displayName: username.value, });
-        signupRequest(user);
-      })
-      .then(() => history.push('/'))
-      .catch(err => {
-        switch(err.code) {
-          case 'auth/invalid-email':
-          case 'auth/email-already-in-use':
-            emailPair[1]({...email, error: err.message});
-            break;
-          case 'auth/weak-password':
-            pwordPair[1]({...pword, error: err.message});
-            break;
-        }
-      })
-      .then(() => {
-        setLoading(false);
-      });
+    signupRequest()
   }
 
   const signupRequest = async user => {
+    setLoading(true);
     const params = new URLSearchParams({
-      firebaseUid: user.uid,
       username: username.value,
+      password: pword.value,
+      email: email.value,
     });
     const str = params.toString();
     console.log(str);
@@ -91,11 +72,14 @@ export default function() {
       },
       body: str,
     })
-    .catch(async err => {
-      const j = await err.json();
-      console.log(j);
+    .then(data => {
+      console.log('Created');
+      return auth.signin(email.value, pword.value);
     })
-    .then(data => console.log(data));
+    .then(user => {
+      history.push('/');
+    })
+    .catch(err => err.json()).then(data => console.log(data))
   }
 
   return (
