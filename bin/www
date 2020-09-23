@@ -3,9 +3,7 @@
 /**
  * Module dependencies.
  */
-const path = require('path');
 require('dotenv').config();
-
 
 var app = require('../app');
 var debug = require('debug')('server:server');

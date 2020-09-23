@@ -6,17 +6,19 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var secureRouter = require('./routes/users');
 var cors = require('cors');
+const config = require('./config.json')
 const mongoose = require('mongoose');
+const mongodb = require('mongodb');
 const admin = require('firebase-admin');
 
 admin.initializeApp({
   credential: admin.credential.applicationDefault(),
-  databaseURL: "https://ankiboards-f7b90.firebaseio.com",
+  databaseURL: config.firebase.DATABASE_URL,
 })
 
 var app = express();
 
-mongoose.connect('mongodb://127.0.0.1:27017/ankiboards', { useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect(`mongodb+srv://${config.mongodb.USER}:${config.mongodb.KEY}@cluster0.0cef9.mongodb.net/${config.mongodb.DB_NAME}?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true});
 mongoose.connection.on('error', error => console.log(error) );
 mongoose.Promise = global.Promise;
 
