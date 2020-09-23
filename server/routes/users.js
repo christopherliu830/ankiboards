@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+const admin = require('firebase-admin');
 const UserModel = require('../model/model').UserModel;
 
 router.get('/profile', async (req, res, next) => {
@@ -9,13 +10,15 @@ router.get('/profile', async (req, res, next) => {
 
 router.post('/profile-name', async (req, res, next) => {
   const name = req.body.username;
-  UserModel.findById({_id: req.user._id}, (err, user) => {
-    user.username = name;
-    user.save()
-      .then(() => {
-        res.status(200).send("Success");
-      });
-  })
+  admin.auth().updateUser(req.user.firebaseUid, {displayName: name})
+    .then(() => {
+      req.user.username = name;
+      req.user.save();
+    })
+    .then(() => {
+      res.status(200).send("Success");
+    })
+    .catch(err => res.status(500).send(err));
 })
 
 module.exports = router;

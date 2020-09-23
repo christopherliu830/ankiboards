@@ -18,6 +18,7 @@ admin.initializeApp({
 
 var app = express();
 
+console.log(`mongodb+srv://${config.mongodb.USER}:${config.mongodb.KEY}@cluster0.0cef9.mongodb.net/${config.mongodb.DB_NAME}?retryWrites=true&w=majority`);
 mongoose.connect(`mongodb+srv://${config.mongodb.USER}:${config.mongodb.KEY}@cluster0.0cef9.mongodb.net/${config.mongodb.DB_NAME}?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true});
 mongoose.connection.on('error', error => console.log(error) );
 mongoose.Promise = global.Promise;

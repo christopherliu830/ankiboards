@@ -8,17 +8,6 @@ router.get('/', function(req, res) {
   res.render('index');
 });
 
-router.get('/test', async function(req, res) {
-  console.log(await UserModel.find());
-  const random = require('crypto').randomBytes(48, (err, buffer) => {
-    var token = buffer.toString('hex');
-    console.log(token);
-    new UserModel({username: token, firebaseUid: token}).save()
-      .then(() => res.status(201).json({message: 'Created'}))
-      .catch(err => console.log(err))
-  })
-})
-
 router.post('/signup', async (req, res, next) => {
   const { username, password, email } = req.body;
   admin.auth().createUser({
