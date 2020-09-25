@@ -6,35 +6,15 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { withLoading } from '../components/LoadingContainer';
 import { useAuth } from '../behaviors/use-auth';
+import Heatmap from '../components/Heatmap';
 
 function ProfileSettingsPage(props) {
   const auth = useAuth();
-  const [ username, setUsername ] = useState('');
-
-  const fetchProfileData = useCallback(async () => {
-    const token = await auth.user.getIdToken(true);
-    return (
-      fetch(process.env.REACT_APP_API + '/profile', {
-        headers: {
-          'Authorization' : `Bearer ${token}`,
-        }
-      }).then(response => response.text())
-        .then(data => console.log(data))
-        .catch(err => console.log(err))
-    );
-  });
-
-  useEffect(() => {
-    console.log('?')
-    if (auth.user) {
-      setUsername(auth.displayName ? auth.displayName : '');
-      fetchProfileData();
-    }
-  }, [auth.user])
+  const [ ankiData , setAnkiData ] = useState();
 
   const handleSync = useCallback(() => {
     const testAction = {
-      action: 'deckNames',
+      action: 'getReviewHistory',
       version: 6
     };
     console.log(process.env.REACT_APP_ANKI_API);
@@ -43,7 +23,10 @@ function ProfileSettingsPage(props) {
       body: JSON.stringify(testAction),
     })
       .then(response => response.json())
-      .then(data => console.log(data))
+      .then(data => {
+        console.log(data);
+        setAnkiData(data.result);
+      })
       .catch(err => console.log(err))
   })
 
@@ -59,6 +42,7 @@ function ProfileSettingsPage(props) {
             <Form.Text>Sync your Anki data: </Form.Text>
             <Button onClick={handleSync}>click me</Button>
           </Form>
+          <Heatmap items={ankiData}/>
         </Col>
       </Row>
     </Container>
