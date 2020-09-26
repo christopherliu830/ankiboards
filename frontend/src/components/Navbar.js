@@ -25,8 +25,11 @@ export default function({userId, onLogout}) {
         style={{fontSize: '1.25rem'}} 
         activeKey={history.location.pathname} 
       >
-        <Nav.Item className="pr-3">
+        <Nav.Item>
           <Nav.Link as={Link} to="/profile" eventKey="/profile">Profile</Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link as={Link} to="/get-started" eventKey="/get-started">Get Started</Nav.Link>
         </Nav.Item>
         <Nav.Item>
           <Nav.Link as={Link} to="/about" eventKey="/about">About</Nav.Link>

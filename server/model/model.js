@@ -11,6 +11,9 @@ const UserSchema = new Schema({
     required: true,
     unique: true,
   },
+  apiKey : {
+    type: String,
+  },
   ankiInfo: {
     cardsStudied: {
       type: Number,

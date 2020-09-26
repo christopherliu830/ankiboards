@@ -4,6 +4,7 @@ import SignUpPage from './SignUpPage';
 import ProfileSettingsPage from './ProfileSettingsPage';
 import UserPage from './UserPage';
 import AboutPage from './AboutPage';
+import GetStartedPage from './GetStartedPage';
 
 export {
   HomePage,
@@ -12,4 +13,5 @@ export {
   ProfileSettingsPage,
   UserPage,
   AboutPage,
+  GetStartedPage,
 };

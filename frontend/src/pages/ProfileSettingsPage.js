@@ -14,7 +14,7 @@ function ProfileSettingsPage(props) {
 
   const handleSync = useCallback(() => {
     const testAction = {
-      action: 'getReviewHistory',
+      action: 'getReviews',
       version: 6
     };
     console.log(process.env.REACT_APP_ANKI_API);
@@ -42,7 +42,7 @@ function ProfileSettingsPage(props) {
             <Form.Text>Sync your Anki data: </Form.Text>
             <Button onClick={handleSync}>click me</Button>
           </Form>
-          <Heatmap items={ankiData}/>
+          {ankiData && <Heatmap calendar={ankiData}/>}
         </Col>
       </Row>
     </Container>
