@@ -1,10 +1,9 @@
 import React, { useState, useCallback } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useParams } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
-import Collapse from 'react-bootstrap/Collapse';
 import LoadingButton from '../components/LoadingButton';
 import FormField from '../components/FormField';
 import { useAuth } from '../behaviors/use-auth';
@@ -32,12 +31,13 @@ export default function() {
   const [ loading, setLoading ] = useState(null);
   const auth = useAuth();
   const history = useHistory();
+  const params = useParams();
 
   const handleSubmit = useCallback(e => {
     e.preventDefault();
     setLoading(true);
     auth.signin(email.value, pword.value)
-    .then(() => history.push('/'))
+    .then(() => history.push(`/${params.redirect}`))
     .catch(err => {
       console.log(err);
       switch(err.code) {

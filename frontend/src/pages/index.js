@@ -5,6 +5,7 @@ import ProfileSettingsPage from './ProfileSettingsPage';
 import UserPage from './UserPage';
 import AboutPage from './AboutPage';
 import GetStartedPage from './GetStartedPage';
+import OAuthPage from './OAuthPage';
 
 export {
   HomePage,
@@ -14,4 +15,5 @@ export {
   UserPage,
   AboutPage,
   GetStartedPage,
+  OAuthPage
 };

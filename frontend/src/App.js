@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {Route, Switch, useLocation } from 'react-router-dom';
 import * as pages from './pages';
-// import Navbar from 'react-bootstrap/Navbar';
 import Navbar from './components/Navbar';
 import Cookies from 'js-cookie';
 import './App.css';
@@ -26,6 +25,7 @@ function App() {
         <Route path='/profile'><pages.ProfileSettingsPage/></Route> 
         <Route path='/about'><pages.AboutPage/></Route>
         <Route path='/get-started'><pages.GetStartedPage/></Route>
+        <Route path='/oauth'><pages.OAuthPage/></Route>
         <Route path='/user/:id'><pages.UserPage/></Route>
       </Switch>
     </div>
