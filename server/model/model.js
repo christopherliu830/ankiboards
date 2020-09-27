@@ -11,14 +11,11 @@ const UserSchema = new Schema({
     required: true,
     unique: true,
   },
-  apiKey : {
-    type: String,
+  client : {
+    type: Object,
   },
   ankiInfo: {
-    cardsStudied: {
-      type: Number,
-      default: 0,
-    }
+    type: Object,
   },
 });
 

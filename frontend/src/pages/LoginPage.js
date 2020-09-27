@@ -7,6 +7,7 @@ import Form from 'react-bootstrap/Form';
 import LoadingButton from '../components/LoadingButton';
 import FormField from '../components/FormField';
 import { useAuth } from '../behaviors/use-auth';
+import qs from 'qs';
 
 export default function() {
   const emailPair = useState({
@@ -31,13 +32,16 @@ export default function() {
   const [ loading, setLoading ] = useState(null);
   const auth = useAuth();
   const history = useHistory();
-  const params = useParams();
 
   const handleSubmit = useCallback(e => {
     e.preventDefault();
     setLoading(true);
     auth.signin(email.value, pword.value)
-    .then(() => history.push(`/${params.redirect}`))
+    .then(() => {
+      const back = qs.parse(history.location.search, { ignoreQueryPrefix: true}).goBack;
+      if (back) history.goBack();
+      else history.push(`/`)
+    })
     .catch(err => {
       console.log(err);
       switch(err.code) {

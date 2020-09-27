@@ -11,6 +11,7 @@ import Heatmap from '../components/Heatmap';
 function ProfileSettingsPage(props) {
   const auth = useAuth();
   const [ ankiData , setAnkiData ] = useState();
+  const [ loading, setLoading ] = useState();
 
   const handleSync = useCallback(() => {
     const testAction = {
@@ -29,6 +30,23 @@ function ProfileSettingsPage(props) {
       })
       .catch(err => console.log(err))
   })
+
+  useEffect(() => {
+    if (!auth.user) return;
+    auth.user.getIdToken()
+    .then(token => { 
+      return fetch(process.env.REACT_APP_API + '/profile-info', {
+        headers: {
+          'Authorization' : `Bearer ${token}`,
+        }
+      })
+    })
+    .then(response => { return response.json(); })
+    .then(data => {
+      console.log(data);
+      setAnkiData(data.reviews)
+    });
+  }, [auth.user]);
 
   return (
     <Container 

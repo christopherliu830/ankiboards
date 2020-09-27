@@ -1,52 +1,48 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var indexRouter = require('./routes/index');
-var secureRouter = require('./routes/private');
-var cors = require('cors');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const indexRouter = require('./routes/index');
+const secureRouter = require('./routes/private');
+const oauthRouter = require('./routes/oauth');
+const cors = require('cors');
 const config = require('./config.json')
 const mongoose = require('mongoose');
-const mongodb = require('mongodb');
 const admin = require('firebase-admin');
+const OAuth2Server = require('express-oauth-server');
 
+const app = express();
+
+// Initialise firebase admin tools
 admin.initializeApp({
   credential: admin.credential.applicationDefault(),
   databaseURL: config.firebase.DATABASE_URL,
 })
 
-var app = express();
-
-console.log(`mongodb+srv://${config.mongodb.USER}:${config.mongodb.KEY}@cluster0.0cef9.mongodb.net/${config.mongodb.DB_NAME}?retryWrites=true&w=majority`);
+//Connect to mongodb database
 mongoose.connect(`mongodb+srv://${config.mongodb.USER}:${config.mongodb.KEY}@cluster0.0cef9.mongodb.net/${config.mongodb.DB_NAME}?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true});
 mongoose.connection.on('error', error => console.log(error) );
 mongoose.Promise = global.Promise;
 
 // view engine setup
-frontendCors = {
-  origin: /ankiboards.com/,
-  credentials: true,
+corsOptions = {
+  origin: ["https://ankiboards.com", /localhost/],
 }
 
-apiCors = {
-  origin: true,
-  credentials: true
-}
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
-app.use(cors({
-  origin: ["https://ankiboards.com", /localhost/],
-  credentials: true,
-}));
 app.use(logger('dev'));
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.options('*', cors(corsOptions));
+app.use('/', oauthRouter);
 app.use('/', indexRouter);
-app.use('/', cors(frontendCors), require('./auth/firebase-token'), secureRouter);
+app.use('/', require('./auth/firebase-token'), secureRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
