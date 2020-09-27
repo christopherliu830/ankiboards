@@ -85,7 +85,7 @@ export default function() {
                   ref={el}
                   id="User Search"
                   delay={100}
-                  minLength={1}
+                  minLength={0}
                   labelKey="username"
                   isLoading={loading}
                   onSearch={handleSearch}

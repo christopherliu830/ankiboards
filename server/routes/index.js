@@ -10,24 +10,23 @@ router.get('/', function(req, res) {
 
 router.post('/signup', async (req, res, next) => {
   const { username, password, email } = req.body;
-  admin.auth().createUser({
-    email,
-    displayName: username,
-    password: password,
-  })
-    .then(userRecord => {
-      return new UserModel({
-        username: username, firebaseUid: userRecord.uid
-      }).save();
+  try {
+
+    const firebaseRecord = await admin.auth().createUser({
+      email,
+      displayName: username,
+      password: password,
     })
-    .then(() => {
-      console.log('Successful');
-      res.status(201).send();
+
+    const model = new UserModel({
+      username: username, firebaseUid: firebaseRecord.uid,
     })
-    .catch(err => {
-      console.log(err);
-      res.status(500).send(err);
-    });
+
+    await model.save();
+
+  } catch (e) {
+    return res.status(500).send(e);
+  }
 });
 
 router.post('/login', async (req, res, next) => {
@@ -69,7 +68,12 @@ router.post('/search-by-username', (req, res, next) => {
 });
 
 router.get('/user/:id', async (req, res, next) => {
-  const user = UserModel.findById(req.params.id);
+  const user = await UserModel.findOne({
+    $or: [
+      {_id: req.params.id},
+      {username: req.params.id},
+    ]
+  });
   res.status(200).send({ankiInfo: user.ankiInfo, username: user.username});
 });
 

@@ -56,10 +56,6 @@ function ProfileSettingsPage(props) {
     >
       <Row className="mb-2">
         <Col>
-          <Form inline>
-            <Form.Text>Sync your Anki data: </Form.Text>
-            <Button onClick={handleSync}>click me</Button>
-          </Form>
           {ankiData && <Heatmap calendar={ankiData}/>}
         </Col>
       </Row>

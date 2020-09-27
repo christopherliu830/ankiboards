@@ -6,7 +6,7 @@ import Row from 'react-bootstrap/Row';
 
 export default function(props) {
   const auth = useAuth();
-  const [ apiKey, setApiKey ] = useState(null); 
+  const [ apiKey, setApiKeys ] = useState(null); 
 
   useEffect(() => {
     if (!auth.user) return;
@@ -21,7 +21,7 @@ export default function(props) {
       })
       .then(data => {
         console.log(data);
-        setApiKey(data.clientId);
+        setApiKeys({clientId: data.clientId, clientSecret: data.clientSecret});
       });
   }, [auth.user]);
 
@@ -33,7 +33,8 @@ export default function(props) {
         </Col>
       </Row>
       <Row><Col>
-        Your API key: {apiKey}
+        Your client ID: {apiKey && apiKey.clientId} <br/>
+        Your client secret: {apiKey && apiKey.clientSecret}
       </Col></Row>
     </Container>
   )
