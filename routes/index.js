@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const admin = require('firebase-admin')
+const admin = require('firebase-admin');
 const UserModel = require('../model/model').UserModel;
 
 /* GET home page. */
@@ -69,11 +69,9 @@ router.post('/search-by-username', (req, res, next) => {
 });
 
 router.get('/user/:id', async (req, res, next) => {
-  UserModel.findById(req.params.id, 'username ankiInfo').exec((err, user) => {
-    if (err) return res.status(500).send("Error occurred finding user");
-    console.log(user);
-    res.status(200).json(user);
-  })
+  const user = UserModel.findById(req.params.id);
+  res.status(200).send({ankiInfo: user.ankiInfo, username: user.username});
 });
+
 
 module.exports = router;
