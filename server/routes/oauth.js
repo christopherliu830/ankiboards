@@ -20,8 +20,8 @@ router.post('/oauth/authorize', require('../auth/firebase-token'), oauth.authori
 router.post('/oauth/token', oauth.token());
 
 router.post('/sync', oauth.authenticate(), async (req, res, done) => {
-  console.log(req.body.reviews);
   const user = await mongoose.model('UserModel').findById(res.locals.oauth.token.user._id);
+  console.log(user.username, 'is syncing');
   user.ankiInfo.reviews = req.body.reviews;
   user.markModified('ankiInfo');
   await user.save();
