@@ -26,6 +26,8 @@ router.post('/signup', async (req, res, next) => {
 
     await model.save();
 
+    res.status(201).send();
+
   } catch (e) {
     return res.status(500).send(e);
   }

@@ -19,6 +19,9 @@ const UserSchema = new Schema({
   },
   ankiInfo: {
     type: Object,
+    default: {
+      reviews: { type: Object }
+    }
   },
 });
 

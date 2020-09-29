@@ -30,5 +30,15 @@ router.get('/profile-info', async (req, res, next) => {
   res.status(200).send(user.ankiInfo);
 })
 
+router.post('/name-change', async (req, res, next) => {
+  try {
+    await admin.auth().getUser(req.user.firebaseUid, { displayName: req.body.username});
+    req.user.username = req.body.username;
+    req.user.username_lower = req.body.username.toLowercase();
+    await req.user.save();
+  } catch(e) {
+    res.status(500).send("Error changing display name!");
+  }
+})
 
 module.exports = router;

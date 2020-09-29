@@ -16,6 +16,7 @@
     "express-oauth-server": "^2.0.0",
     "firebase": "^7.21.0",
     "firebase-admin": "^9.2.0",
+    "forever": "^3.0.2",
     "http-errors": "~1.6.3",
     "mongodb": "^3.6.2",
     "mongoose": "^5.10.6",
