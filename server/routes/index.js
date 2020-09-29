@@ -19,10 +19,14 @@ router.post('/signup', async (req, res, next) => {
     })
 
     const model = new UserModel({
-      username: username, firebaseUid: firebaseRecord.uid,
+      username: username, 
+      firebaseUid: firebaseRecord.uid,
+      username_lower: username.toLowerCase(),
     })
 
     await model.save();
+
+    res.status(201).send();
 
   } catch (e) {
     return res.status(500).send(e);

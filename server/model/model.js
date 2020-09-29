@@ -6,6 +6,9 @@ const UserSchema = new Schema({
     type: String,
     required: true,
   }, 
+  username_lower: {
+    type: String,
+  },
   firebaseUid : {
     type: String,
     required: true,
@@ -16,6 +19,9 @@ const UserSchema = new Schema({
   },
   ankiInfo: {
     type: Object,
+    default: {
+      reviews: { type: Object }
+    }
   },
 });
 
