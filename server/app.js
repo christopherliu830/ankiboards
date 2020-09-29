@@ -12,16 +12,18 @@ const mongoose = require('mongoose');
 const admin = require('firebase-admin');
 const OAuth2Server = require('express-oauth-server');
 
+require('dotenv').config();
+
 const app = express();
 
 // Initialise firebase admin tools
 admin.initializeApp({
   credential: admin.credential.applicationDefault(),
-  databaseURL: config.firebase.DATABASE_URL,
+  databaseURL: process.env.FIREBASE_URL,
 })
 
 //Connect to mongodb database
-mongoose.connect(`mongodb+srv://${config.mongodb.USER}:${config.mongodb.KEY}@cluster0.0cef9.mongodb.net/${config.mongodb.DB_NAME}?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect(`mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_KEY}@cluster0.0cef9.mongodb.net/${process.env.MONGODB_NAME}?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true});
 mongoose.connection.on('error', error => console.log(error) );
 mongoose.Promise = global.Promise;
 
