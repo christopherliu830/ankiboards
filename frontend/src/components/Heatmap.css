@@ -10,6 +10,10 @@
 .year-title {
   text-align: center;
 }
+.year-chart {
+  width: 100%;
+  overflow-x: scroll;
+}
 
 .month {
   display: flex;
@@ -24,7 +28,6 @@
 
 .card-outer {
   position: relative;
-  overflow: scroll;
   flex: 1 1 auto;
   display: flex;
   flex-direction: column-reverse;

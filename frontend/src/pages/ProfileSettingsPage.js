@@ -7,11 +7,13 @@ import Button from 'react-bootstrap/Button';
 import { withLoading } from '../components/LoadingContainer';
 import { useAuth } from '../behaviors/use-auth';
 import Heatmap from '../components/Heatmap';
+import EditableField from '../components/EditableField';
 
 function ProfileSettingsPage(props) {
   const auth = useAuth();
   const [ ankiData , setAnkiData ] = useState();
   const [ loading, setLoading ] = useState();
+  const [ displayName, setDisplayName ] = useState('');
 
   const handleSync = useCallback(() => {
     const testAction = {
@@ -48,12 +50,23 @@ function ProfileSettingsPage(props) {
     });
   }, [auth.user]);
 
+  useEffect(() => { if (auth.user) setDisplayName(auth.user.displayName) }, [auth.user]);
+
+  const handleEdit = val => {
+    setDisplayName(val);
+  }
+
   return (
     <Container 
       fluid 
-      className="h-100 d-flex flex-column my-5"
+      className="h-100 d-flex flex-column p-5"
       {...props}
     >
+      <Row className="mb-2">
+        <Col>
+          {auth.user && <EditableField viewProps={{className:"h1"}} value={displayName} onSave={handleEdit}/>}
+        </Col>
+      </Row>
       <Row className="mb-2">
         <Col>
           {ankiData && <Heatmap calendar={ankiData}/>}

@@ -4,8 +4,6 @@ import Tooltip from 'react-bootstrap/Tooltip';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import { withLoading } from '../behaviors/with-loading';
 import { ArrowLeftCircle, ArrowRightCircle, ArrowDownCircle, ArrowUpCircle } from 'react-feather';
 import './Heatmap.css';
 
@@ -41,34 +39,15 @@ const Year = (props) => {
   const ref = useRef();
   const [ overflown, setOverflown ] = useState(false);
 
-  const handleResize = () => {
-    setOverflown(ref.current.scrollWidth - 100 > ref.current.clientWidth); // Maybe change this flat value later
-  };
-
-  const handleClick = (e, direction) => {
-    ref.current.scrollBy({left: window.innerWidth * 1/2 * direction, behavior: 'smooth'});
-  };
-
-  useEffect(() => {
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, [])
-
   return (
     <div className="m-3">
       <h3>{title}</h3>
       <div className="d-flex">
-        { overflown && <Button variant="circle" onClick={e => handleClick(e, -1)}>
-          <ArrowLeftCircle/>
-        </Button>}
-        <div className="d-flex overflow-hidden" ref={ref}>
+        <div className="d-flex year-chart" ref={ref}>
           {keys.map(key => {
             return <Month key={key} days={months[key]} title={numToMonth[key]}/>
           })}
         </div>
-        { overflown && <Button variant="circle" onClick={e => handleClick(e, 1)}>
-          <ArrowRightCircle/>
-        </Button>}
       </div>
     </div>
   )
@@ -130,7 +109,7 @@ export default function Calendar(props) {
   };
 
   return (
-    <Card className="shadow rounded m-3 bg-light">
+    <Card className="shadow rounded bg-light">
       <Card.Header>Heatmap</Card.Header>
       <Card.Body className="d-flex flex-column heatmap-card-body">
         <div className="card-outer" ref={ref}>

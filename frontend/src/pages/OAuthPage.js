@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useRouteMatch, Route, Router } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -11,25 +11,6 @@ import { withLoading } from '../behaviors/with-loading';
 import qs from 'qs';
 
 export default function(props) {
-  const emailPair = useState({
-    id: 'email',
-    label: 'Email',
-    placeholder: "penguin2squishy@gmail.com",
-    value: '', 
-    error: '',
-    type: 'text'
-  });
-  const pwordPair = useState({
-    id: 'password', 
-    label: 'Password',
-    value: '', 
-    error: '',
-    placeholder: 'password',
-    type: 'password'
-  });
-  const email = emailPair[0];
-  const pword = pwordPair[0];
-
   const [ loading, setLoading ] = useState();
   const [ pageLoaded, setPageLoaded ] = useState(false);
   const [ success, setSuccess ] = useState(false);
@@ -41,21 +22,40 @@ export default function(props) {
     else if (auth.user === false) history.push(`/login?goBack=true`); // null means we don't know if they are signed in
   }, [auth.user])
 
-  const handleSubmit = e => {
+  const sendClientData = async () => {
+    let clientData = {}
+    const token = await auth.user.getIdToken();
+    const response = await fetch(process.env.REACT_APP_API + '/add-client', {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    const data = await response.json();
+    const post = await fetch('http://localhost:9091', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    })
+    if (!post.ok) throw Error("Getting Client Data failed")
+    else return data;
+  }
+
+  const handleSubmit = async e => {
     e.preventDefault();
     const reqQuery = qs.parse(history.location.search, { ignoreQueryPrefix: true});
 
+    setLoading(true);
+    const data = await sendClientData();
+
     const params = new URLSearchParams({
-      client_id: reqQuery.client_id,
+      client_id: data.clientId,
       response_type: 'code',
       state: reqQuery.state,
       redirectUri: reqQuery.redirect,
     }).toString();
+    console.log(params);
 
-    setLoading(true);
+
     auth.user.getIdToken()
       .then(token => {
-        return fetch(process.env.REACT_APP_API + '/oauth/authorize?', {
+        return fetch(process.env.REACT_APP_API + '/oauth/authorize', {
           method: 'POST',
           headers: { 
             'Authorization' : `Bearer ${token}`,
@@ -88,6 +88,7 @@ export default function(props) {
   const LoadingDiv = withLoading(pageLoaded)("div")
 
   return (
+    <>
     <Container fluid className="h-75 d-flex flex-column justify-content-center p-5">
       <Row className="justify-content-center">
         <Col style={{maxWidth: '400px'}} className="bg-light p-5">
@@ -98,5 +99,6 @@ export default function(props) {
         </Col>
       </Row>
     </Container>
+    </>
   )
 }

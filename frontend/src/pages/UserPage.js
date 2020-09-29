@@ -28,7 +28,7 @@ export default function ({ match }) {
         <h1>{userData && userData.username}</h1>
       </Row>
       <Row>
-        {userData && (userData.ankiInfo.reviews ? 
+        {userData && (userData.ankiInfo ? 
           <Heatmap calendar={userData.ankiInfo.reviews}/> :
           <h3>{userData.username} has not synced any reviews!</h3>
         )}
