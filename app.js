@@ -7,7 +7,6 @@ const indexRouter = require('./routes/index');
 const secureRouter = require('./routes/private');
 const oauthRouter = require('./routes/oauth');
 const cors = require('cors');
-const config = require('./config.json')
 const mongoose = require('mongoose');
 const admin = require('firebase-admin');
 const OAuth2Server = require('express-oauth-server');
