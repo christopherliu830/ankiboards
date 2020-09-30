@@ -1,0 +1,9 @@
+button[editext="edit-button"], button[editext="save-button"], button[editext="cancel-button"] {
+  padding: 1px;
+  border: none;
+  background: none;
+}
+
+input, textarea {
+  width: fit-content;
+}
