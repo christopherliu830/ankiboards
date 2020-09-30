@@ -6,6 +6,9 @@ import Col from 'react-bootstrap/Col';
 import {withLoading} from '../components/LoadingContainer';
 import Heatmap from '../components/Heatmap';
 
+//eslint-disable-next-line
+import HeatmapBuilder from 'worker-loader!../workers/heatmap.worker.js';
+
 export default function ({ match }) {
   const params = useParams();
   const queryId = params.id;
@@ -17,10 +20,17 @@ export default function ({ match }) {
         if (response.ok) return response.json();
       })
       .then(data => {
+        console.log(data);
+
+        const worker = new HeatmapBuilder();
+        worker.postMessage(data.ankiInfo.revlog);
         setUserData(data);
       })
     .catch(err => console.log(err))
   }, []);
+
+  useEffect(() => {
+  }, [])
 
   return ( 
     <Container fluid className="h-100 d-flex flex-column m-5">

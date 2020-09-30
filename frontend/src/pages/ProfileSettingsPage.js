@@ -8,6 +8,7 @@ import { withLoading } from '../components/LoadingContainer';
 import { useAuth } from '../behaviors/use-auth';
 import Heatmap from '../components/Heatmap';
 import EditableField from '../components/EditableField';
+import editDisplayName from '../apicalls/edit-displayname';
 
 function ProfileSettingsPage(props) {
   const auth = useAuth();
@@ -52,8 +53,9 @@ function ProfileSettingsPage(props) {
 
   useEffect(() => { if (auth.user) setDisplayName(auth.user.displayName) }, [auth.user]);
 
-  const handleEdit = val => {
-    setDisplayName(val);
+  const handleEdit = async val => {
+    const token = await auth.user.getIdToken();
+    editDisplayName(val, token);
   }
 
   return (

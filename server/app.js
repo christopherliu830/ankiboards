@@ -45,8 +45,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/', oauthRouter);
 app.use('/', indexRouter);
+app.use('/', oauthRouter);
 app.use('/', require('./auth/firebase-token'), secureRouter);
 
 // catch 404 and forward to error handler

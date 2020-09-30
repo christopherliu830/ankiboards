@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const admin = require('firebase-admin');
 const {UserModel, ReviewEntry }= require('../model/model');
+const moment = require('moment');
 
 /* GET home page. */
 router.get('/', function(req, res) {
@@ -50,13 +51,12 @@ router.post('/search-by-username', (req, res, next) => {
 });
 
 router.get('/user/:id', async (req, res, next) => {
-  const user = await UserModel.findOne({
-    $or: [
-      {_id: req.params.id},
-      {username: req.params.id},
-    ]
-  });
-  const reviews = await ReviewEntry.find({userid: user._id});
+  const yearAgo = moment().subtract(1, 'years').valueOf();
+  const user = await UserModel.findById(req.params.id).lean();
+  const reviews = await ReviewEntry.find({
+    userid: user._id,
+    id: { $gt: yearAgo }
+  }).lean();
   res.status(200).send({ankiInfo: {...user.ankiInfo, revlog: reviews}, username: user.username});
 });
 

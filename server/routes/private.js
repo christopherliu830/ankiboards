@@ -3,7 +3,7 @@ var router = express.Router();
 const admin = require('firebase-admin');
 const crypto = require('crypto');
 const mongoose = require('mongoose');
-const {UserModel, ReviewEntry} = require('../model/model');
+const UserModel = require('../model/model').UserModel;
 
 router.get('/profile', async (req, res, next) => {
   const {username, email, ankiInfo} = await UserModel.findById(req.user._id).lean().exec();
@@ -27,8 +27,7 @@ router.get('/add-client', async (req, res, next) => {
 
 router.get('/profile-info', async (req, res, next) => {
   const user = req.user;
-  const reviews = await ReviewEntry.find({userid: user._id});
-  res.status(200).send({...user.ankiInfo, revlog: reviews});
+  res.status(200).send(user.ankiInfo);
 })
 
 router.post('/name-change', async (req, res, next) => {

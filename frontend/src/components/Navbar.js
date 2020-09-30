@@ -26,19 +26,13 @@ export default function({userId, onLogout}) {
         activeKey={history.location.pathname} 
       >
         <Nav.Item>
-          <Nav.Link as={Link} to="/profile" eventKey="/profile">Profile</Nav.Link>
-        </Nav.Item>
-        <Nav.Item>
-          <Nav.Link as={Link} to="/get-started" eventKey="/get-started">Get Started</Nav.Link>
-        </Nav.Item>
-        <Nav.Item>
           <Nav.Link as={Link} to="/about" eventKey="/about">About</Nav.Link>
         </Nav.Item>
       </Nav>
       <Navbar.Collapse className="justify-content-end">
         { auth.user ? 
           <div>
-            <Navbar.Text>Signed in as: <span className="text-light mr-2">{auth.user.displayName}</span></Navbar.Text>
+            <Navbar.Text>Signed in as: <Link to="/profile" className="text-light mr-2">{auth.user.displayName}</Link></Navbar.Text>
             <Button variant="primary" href="/" onClick={handleSignOut}>Logout</Button>
           </div> :
           <>

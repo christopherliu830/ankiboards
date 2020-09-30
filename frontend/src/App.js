@@ -24,7 +24,7 @@ function App() {
         <Route path='/signup'><pages.SignUpPage/></Route>
         <Route path='/profile'><pages.ProfileSettingsPage/></Route> 
         <Route path='/about'><pages.AboutPage/></Route>
-        <Route path='/get-started'><pages.GetStartedPage/></Route>
+        {/* <Route path='/get-started'><pages.GetStartedPage/></Route> */}
         <Route path='/oauth'><pages.OAuthPage/></Route>
         <Route path='/user/:id'><pages.UserPage/></Route>
       </Switch>
