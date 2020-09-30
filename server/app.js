@@ -26,6 +26,10 @@ mongoose.connect(`mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGOD
 mongoose.connection.on('error', error => console.log(error) );
 mongoose.Promise = global.Promise;
 
+app.oauth = new OAuth2Server({
+  model: require('./model/authcode')
+});
+
 // view engine setup
 corsOptions = {
   origin: ["https://ankiboards.com", /localhost/],
