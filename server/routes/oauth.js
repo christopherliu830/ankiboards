@@ -22,14 +22,4 @@ router.post('/oauth/token', oauth.token());
 
 router.use('/', oauth.authenticate(), addonRoutes);
 
-router.post('/sync', oauth.authenticate(), async (req, res, done) => {
-  const user = await mongoose.model('UserModel').findById(res.locals.oauth.token.user._id);
-  console.log(user.username, 'is syncing');
-  user.ankiInfo.reviews = req.body.reviews;
-  user.markModified('ankiInfo');
-  await user.save();
-  console.log(user);
-  res.status(200).send("Success");
-});
-
 module.exports = router;
