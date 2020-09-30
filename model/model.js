@@ -1,6 +1,14 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+const AnkiInfoSchema = new Schema({
+  reviews: { 
+    type: Object 
+  },
+  revlog: {type: Array, default: []},
+  lastSynced: {type: Number, default: 0},
+})
+
 const UserSchema = new Schema({
   username: {
     type: String,
@@ -18,10 +26,7 @@ const UserSchema = new Schema({
     type: Object,
   },
   ankiInfo: {
-    type: Object,
-    default: {
-      reviews: { type: Object }
-    }
+    type: AnkiInfoSchema,
   },
 });
 
