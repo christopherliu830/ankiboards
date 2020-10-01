@@ -6,9 +6,7 @@ const mongoose = require('mongoose');
 const addonRoutes = require('./addon');
 
 // Initialize auth token server
-const oauth = new OAuth2Server({
-  model: require('../model/authcode')
-});
+const oauthServer = require('../auth/server');
 
 const handler = {
   handle: (req, res) => {
@@ -16,10 +14,8 @@ const handler = {
   }
 }
 
-router.post('/oauth/authorize', require('../auth/firebase-token'), oauth.authorize({authenticateHandler: handler}))
+router.post('/authorize', require('../auth/firebase-token'), oauthServer.authorize({authenticateHandler: handler}))
 
-router.post('/oauth/token', oauth.token());
-
-router.use('/', oauth.authenticate(), addonRoutes);
+router.post('/token', oauthServer.token());
 
 module.exports = router;

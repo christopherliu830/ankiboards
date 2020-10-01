@@ -36,8 +36,10 @@ export default function() {
     })
     .then(response => response.ok && response.json())
     .then(data => {
-      setLoading(false);
-      setSuggestions(data);
+      if (Array.isArray(data)) {
+        setLoading(false);
+        setSuggestions(data);
+      }
     })
     .catch(err => console.log(err));
   }, [setLoading, setSuggestions]);
@@ -65,12 +67,39 @@ export default function() {
     else history.push(`/user/${el.current.state.activeItem._id}`);
   }, [el, history]);
 
-  const handleInputChange = useCallback(() => {
-    setError('');
-    if (el.current.state.text !== '') setLoading(true);
-    else setLoading(false);
-  }, [el, setLoading]);
-
+  return (
+    <Container fluid="sm" className="h-50 my-5 text-center">
+      <Row className="h-100">
+        <Col className="p-5 m-auto">
+         <div><h1>Ankiboards</h1></div>
+         <div><h4>Leaderboards for Anki</h4></div>
+          <InputGroup className="p-5">
+            <AsyncTypeahead
+              ref={el}
+              id="User Search"
+              delay={100}
+              minLength={0}
+              labelKey="username"
+              isLoading={loading}
+              onSearch={handleSearch}
+              options={suggestions}
+              onChange={(selected) => {setSelected(selected)}}
+              onActiveItemChange={item => console.log(item)}
+              selected={selected}
+              placeholder="Search for a user..."
+              onKeyDown={e => {if (e.key === 'Enter') handleSubmit(e)}}
+              useCache={false}
+            />
+            <InputGroup.Append>
+              <LoadingButton loaded={!submitted} type="submit" variant={"dark"} style={{ minWidth:"80px" }}>
+                Search
+              </LoadingButton>
+            </InputGroup.Append>
+          </InputGroup>
+        </Col>
+      </Row>
+    </Container>
+  )
   return (
     <Container fluid className="h-50 d-flex flex-column align-items-center justify-content-center">
       <Row><Col><h1>Ankiboards</h1></Col></Row>
@@ -95,7 +124,6 @@ export default function() {
                   selected={selected}
                   placeholder="Search for a user..."
                   onKeyDown={e => {if (e.key === 'Enter') handleSubmit(e)}}
-                  onInputChange={handleInputChange}
                   useCache={false}
                 />
                 <InputGroup.Append>

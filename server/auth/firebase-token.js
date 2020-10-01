@@ -6,10 +6,10 @@ const UserModel = require('../model/model').UserModel;
 module.exports = (req, res, next) => {
   bearerToken()(req, res, () => {
     const token = req.token;
-    if (!token) return res.status(401).send('You need to provide a firebase token to access the server');
+    if (!token) return res.status(401).send({message: 'You need to provide a firebase token to access the server'});
     admin.auth().verifyIdToken(token)
       .then(decodedToken => {
-        return UserModel.findOne({firebaseUid: decodedToken.uid}).populate('ankiInfo');
+        return UserModel.findOne({firebaseUid: decodedToken.uid});
       })
       .then(user => {
         if (!user) throw Error("Error decoding token");
@@ -17,7 +17,7 @@ module.exports = (req, res, next) => {
         next();
       })
       .catch(err => {
-        res.status(404).send(err.toString());
+        res.status(401).send(err.toString());
     });
   })
 };
