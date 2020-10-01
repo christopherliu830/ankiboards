@@ -141,7 +141,7 @@ export default function (props) {
   const LoadingBody = withLoading(!!calendar)(InnerHeatmap);
 
   return (
-    <Card className="shadow rounded bg-light">
+    <Card {...props} >
       <Card.Header>Heatmap</Card.Header>
       <Card.Body className="d-flex flex-column heatmap-card-body">
         <div className="card-outer" ref={ref}>

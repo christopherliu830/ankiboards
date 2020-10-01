@@ -22,7 +22,8 @@
     "react-feather": "^2.0.8",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "^3.4.3"
+    "react-scripts": "^3.4.3",
+    "victory": "^35.1.1"
   },
   "scripts": {
     "start": "env-cmd -f .env.development react-scripts start && ../server/bin/www &",

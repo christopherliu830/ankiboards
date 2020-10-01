@@ -5,7 +5,8 @@ import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
 import {withLoading} from '../components/LoadingContainer';
 import Heatmap from '../components/Heatmap';
-import { getHeatmap, getProfileData } from '../util/apicalls';
+import ByHourGraph from '../components/ByHourGraph';
+import { getProfileData } from '../util/apicalls';
 
 export default function ({ match }) {
   const params = useParams();
@@ -27,7 +28,8 @@ export default function ({ match }) {
       </Row>
       <Row>
         <Col>
-          <Heatmap userId={queryId}/> 
+          <Heatmap className="m-5 shadow rounded bg-light" userId={queryId}/> 
+          <ByHourGraph className="m-5 shadow rounded bg-light" userId={queryId}/>
         </Col>
       </Row>
     </Container>
