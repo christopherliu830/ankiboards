@@ -10,7 +10,10 @@ export default function ({ match }) {
   const params = useParams();
   const queryId = params.id;
   const [ isLoaded, setIsLoaded ] = useState(false);
-  const [ userData, setUserData ] = useState({ankiInfo: {}, username: ''});
+  const [ userData, setUserData ] = useState({
+    ankiInfo: {}, 
+    username: ''
+  });
 
   useEffect(() => {
     fetch(process.env.REACT_APP_API + `/user/${queryId}`)
@@ -18,8 +21,7 @@ export default function ({ match }) {
         if (response.ok) return response.json();
       })
       .then(data => {
-        console.log(data);
-        setUserData(data);
+        setUserData(...userData, ...data);
         setIsLoaded(true);
       })
     .catch(err => console.log(err))
