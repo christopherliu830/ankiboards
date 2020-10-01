@@ -32,7 +32,13 @@ const UserSchema = new Schema({
     required: true,
     unique: true,
   },
-  ankiInfo: { type: AnkiInfoSchema },
+  lastSynced: {type: Number},
+  ankiInfo: { 
+    type: Object, 
+    default: {
+      heatmap: {},
+    } 
+  },
 });
 
 module.exports.UserModel = mongoose.model('UserModel', UserSchema);
