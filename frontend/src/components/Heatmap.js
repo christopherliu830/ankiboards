@@ -124,10 +124,6 @@ export default function (props) {
     }
   }, [calendar])
 
-  useEffect(() => {
-    if (!ref.current) return;
-  }, [expanded, ref.current])
-
   const handleClick = e => {
     if (expanded) {
       ref.current.style.maxHeight = `${innerRef.current.scrollHeight/len}px`;
