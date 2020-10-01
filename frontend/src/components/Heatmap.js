@@ -1,23 +1,22 @@
-import React, { useState, useRef, useMemo, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import colormap from 'colormap';
 import Tooltip from 'react-bootstrap/Tooltip';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
-import { ArrowLeftCircle, ArrowRightCircle, ArrowDownCircle, ArrowUpCircle } from 'react-feather';
+import { ArrowDownCircle, ArrowUpCircle } from 'react-feather';
+import moment from 'moment';
 import './Heatmap.css';
 
 const colors = colormap({
   colormap: 'yignbu',
 }).reverse();
-
 const getColorIndex = (num, max) => {
   const offset = 10;
   max = 500;
   if (num === max) num--; // So that we don't get colors[colors.length]
   return num > 0 ? colors[Math.floor(num/max * (colors.length - offset)) + offset] : colors[offset];
 }
-
 const numToMonth = {
   1: 'Jan',
   2: 'Feb',
@@ -32,34 +31,32 @@ const numToMonth = {
   11: 'Nov',
   12: 'Dec',
 }
-
 const Year = (props) => {
-  const { title, months } = props;
+  const { year, months } = props;
   const keys = Object.keys(months);
   const ref = useRef();
-  const [ overflown, setOverflown ] = useState(false);
 
   return (
     <div className="m-3">
-      <h3>{title}</h3>
+      <h3>{year}</h3>
       <div className="d-flex">
         <div className="d-flex year-chart" ref={ref}>
-          {keys.map(key => {
-            return <Month key={key} days={months[key]} title={numToMonth[key]}/>
+          {keys.map(month => {
+            const date = new Date(year, month);
+            return <Month key={month} year={year} month={month} days={months[month]}/>
           })}
         </div>
       </div>
     </div>
   )
 }
-
 const Month = (props) => {
-  const { title, days } = props;
+  const { year, month, days } = props;
   const keys = Object.keys(days)
 
   const padding = [];
   if (keys.length > 0) {
-    const daysToPad = new Date(days[keys[0]].unixTime * 1000).getDay();
+    const daysToPad = new Date(year, month, keys[0]).getDay();
     for (let i = 0; i < daysToPad; i++) {
       padding.push(<div key={-i} className="heatmap-square"/>);
     }
@@ -67,19 +64,19 @@ const Month = (props) => {
 
   return (
     <div className="m-1">
-      <h5>{title}</h5>
+      <h5>{numToMonth[month]}</h5>
       <div className="month">
         {padding}
-        {keys.map(key => {
+        {keys.map(day => {
           return <OverlayTrigger
-            key={key}
+            key={day}
             overlay={
               <Tooltip className="loadedTest">
-                {new Date(days[key].unixTime * 1000).toDateString()} : {`${days[key].count} reviews`}
+                {new Date(year, month, day).toDateString()} : {`${days[day]} reviews`}
               </Tooltip>
             }
           >
-            <div key={key} className="heatmap-square" style={{background: getColorIndex(days[key].count)}}/>
+            <div key={day} className="heatmap-square" style={{background: getColorIndex(days[day])}}/>
           </OverlayTrigger>
         })}
       </div>
@@ -87,16 +84,16 @@ const Month = (props) => {
   )
 }
 
-export default function Calendar(props) {
-  const { calendar } = props;
+export default function (props) {
   const ref = useRef();
   const innerRef = useRef();
-  const years = Object.keys(calendar);
   const [ expanded, setExpanded ] = useState(false);
+  const {calendar} = props;
+  const years = calendar && Object.keys(calendar);
 
   useEffect(() => {
     ref.current.style.maxHeight = `${innerRef.current.scrollHeight/years.length}px`;
-  }, []);
+  }, [calendar]);
 
   const handleClick = e => {
     if (expanded) {
@@ -114,7 +111,7 @@ export default function Calendar(props) {
       <Card.Body className="d-flex flex-column heatmap-card-body">
         <div className="card-outer" ref={ref}>
           <div className="card-inner-inner" ref={innerRef}>
-            { years.map(key => (<Year key={key} title={key} months={calendar[key]}/>)) }
+            { years && years.map(key => (<Year key={key} year={key} months={calendar[key]}/>)) }
           </div>
         </div>
         <Button variant="circle" onClick={handleClick}>
@@ -124,8 +121,6 @@ export default function Calendar(props) {
     </Card>
   )
 }
-
-
 
 // const Heatmap = React.forwardRef((props, ref) => {
 //   const { items, ...otherProps} = props;

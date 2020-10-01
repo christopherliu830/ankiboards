@@ -55,9 +55,8 @@ router.get('/user/:id', async (req, res, next) => {
       {_id: req.params.id},
       {username: req.params.id},
     ]
-  });
-  const reviews = await ReviewEntry.find({userid: user._id});
-  res.status(200).send({ankiInfo: {...user.ankiInfo, revlog: reviews}, username: user.username});
+  }).lean();
+  res.status(200).send({ankiInfo: user.ankiInfo, username: user.username});
 });
 
 

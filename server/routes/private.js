@@ -33,7 +33,7 @@ router.get('/profile-info', async (req, res, next) => {
 
 router.post('/name-change', async (req, res, next) => {
   try {
-    await admin.auth().getUser(req.user.firebaseUid, { displayName: req.body.username});
+    await admin.auth().updateUser(req.user.firebaseUid, { displayName: req.body.username});
     req.user.username = req.body.username;
     req.user.username_lower = req.body.username.toLowerCase();
     await req.user.save();

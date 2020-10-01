@@ -6,6 +6,7 @@ const logger = require('morgan');
 const indexRouter = require('./routes/index');
 const secureRouter = require('./routes/private');
 const oauthRouter = require('./routes/oauth');
+const addonRouter = require('./routes/addon');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const admin = require('firebase-admin');
@@ -42,10 +43,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/', indexRouter);
-app.use('/', require('./auth/firebase-token'), secureRouter);
-app.use('/', oauthServer.authenticate(), oauthRouter);
 app.use('/oauth', oauthRouter);
+app.use('/private', require('./auth/firebase-token'), secureRouter);
+app.use('/addon', oauthServer.authenticate(), addonRouter);
+app.use('/', indexRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -9,7 +9,8 @@ import Heatmap from '../components/Heatmap';
 export default function ({ match }) {
   const params = useParams();
   const queryId = params.id;
-  const [ userData, setUserData ] = useState(null);
+  const [ isLoaded, setIsLoaded ] = useState(false);
+  const [ userData, setUserData ] = useState({ankiInfo: {}, username: ''});
 
   useEffect(() => {
     fetch(process.env.REACT_APP_API + `/user/${queryId}`)
@@ -17,22 +18,30 @@ export default function ({ match }) {
         if (response.ok) return response.json();
       })
       .then(data => {
+        console.log(data);
         setUserData(data);
+        setIsLoaded(true);
       })
     .catch(err => console.log(err))
   }, []);
 
+  const LoadingContainer = withLoading(isLoaded)(Container);
+
   return ( 
-    <Container fluid className="h-100 d-flex flex-column m-5">
-      <Row className="mb-2">
+    <LoadingContainer fluid className="h-100 mx-auto my-5">
+      <Row className="m-2">
+        <Col>
         <h1>{userData && userData.username}</h1>
+        </Col>
       </Row>
       <Row>
-        {userData && (userData.ankiInfo ? 
-          <Heatmap calendar={userData.ankiInfo.reviews}/> :
-          <h3>{userData.username} has not synced any reviews!</h3>
-        )}
+        <Col>
+          {userData.ankiInfo.heatmap ? 
+            <Heatmap calendar={userData.ankiInfo.heatmap}/> :
+            <h3>{userData.username} has not synced any reviews!</h3>
+          }
+        </Col>
       </Row>
-    </Container>
+    </LoadingContainer>
   )
 }

@@ -3,9 +3,11 @@ import Spinner from 'react-bootstrap/Spinner';
 
 export default function LoadingContainer(props) {
   return (
-    <Spinner animation="border" role="status" {...props}>
-      <span className="sr-only">Loading...</span>
-    </Spinner>
+    <div className="w-100 h-100 d-flex align-items-center justify-content-center">
+      <Spinner animation="border" role="status" {...props}>
+        <span className="sr-only">Loading...</span>
+      </Spinner>
+    </div>
   )
 }
 

@@ -29,7 +29,7 @@ export default function({userId, onLogout}) {
           <Nav.Link as={Link} to="/about" eventKey="/about">About</Nav.Link>
         </Nav.Item>
       </Nav>
-      <Navbar.Collapse className="justify-content-end">
+      <div className="justify-content-end">
         { auth.user ? 
           <div>
             <Navbar.Text>Signed in as: <Link to="/profile" className="text-light mr-2">{auth.user.displayName}</Link></Navbar.Text>
@@ -40,7 +40,7 @@ export default function({userId, onLogout}) {
             <Link to="/signup"><Button className="mx-1" variant="outline-light">Sign up</Button></Link>
           </>
         }
-      </Navbar.Collapse>
+      </div>
     </Navbar>
   )
 }

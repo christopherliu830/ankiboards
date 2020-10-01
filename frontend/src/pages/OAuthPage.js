@@ -25,7 +25,7 @@ export default function(props) {
   const sendClientData = async () => {
     let clientData = {}
     const token = await auth.user.getIdToken();
-    const response = await fetch(process.env.REACT_APP_API + '/add-client', {
+    const response = await fetch(process.env.REACT_APP_API + '/user/add-client', {
       headers: { 'Authorization': `Bearer ${token}` }
     });
     const data = await response.json();
@@ -36,7 +36,6 @@ export default function(props) {
     if (!post.ok) throw Error("Getting Client Data failed")
     else return data;
   }
-
   const handleSubmit = async e => {
     e.preventDefault();
     const reqQuery = qs.parse(history.location.search, { ignoreQueryPrefix: true});
@@ -73,7 +72,6 @@ export default function(props) {
       })
       .catch(err => console.log(err));
   };
-
   const LogInForm = () => {
     return <Form>
       <p className="text-center">Authorize app to upload data to Ankiboards?</p>
