@@ -5,45 +5,31 @@ import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
 import {withLoading} from '../components/LoadingContainer';
 import Heatmap from '../components/Heatmap';
+import { getHeatmap, getProfileData } from '../util/apicalls';
 
 export default function ({ match }) {
   const params = useParams();
   const queryId = params.id;
-  const [ isLoaded, setIsLoaded ] = useState(false);
-  const [ userData, setUserData ] = useState({
-    ankiInfo: {}, 
-    username: ''
-  });
+  const [ userData, setUserData ] = useState({ username: null });
 
   useEffect(() => {
-    fetch(process.env.REACT_APP_API + `/user/${queryId}`)
-      .then( response => {
-        if (response.ok) return response.json();
-      })
-      .then(data => {
-        setUserData(...userData, ...data);
-        setIsLoaded(true);
-      })
-    .catch(err => console.log(err))
-  }, []);
+    getProfileData(queryId).then(data => setUserData({username: data.username}));
+  }, [queryId]);
 
-  const LoadingContainer = withLoading(isLoaded)(Container);
+  const UsernameCol = withLoading(userData.username, {left: true})(Col)
 
   return ( 
-    <LoadingContainer fluid className="h-100 mx-auto my-5">
+    <Container fluid className="h-100 mx-auto my-5">
       <Row className="m-2">
-        <Col>
+        <UsernameCol>
         <h1>{userData && userData.username}</h1>
-        </Col>
+        </UsernameCol>
       </Row>
       <Row>
         <Col>
-          {userData.ankiInfo.heatmap ? 
-            <Heatmap calendar={userData.ankiInfo.heatmap}/> :
-            <h3>{userData.username} has not synced any reviews!</h3>
-          }
+          <Heatmap userId={queryId}/> 
         </Col>
       </Row>
-    </LoadingContainer>
+    </Container>
   )
 }
