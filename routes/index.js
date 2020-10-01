@@ -56,8 +56,18 @@ router.get('/user/:id', async (req, res, next) => {
       {username: req.params.id},
     ]
   }).lean();
-  res.status(200).send({ankiInfo: user.ankiInfo, username: user.username});
+  res.status(200).send({username: user.username});
 });
+
+router.get('/user/:id/heatmap', async (req, res, next) => {
+  const user = await UserModel.findOne({
+    $or: [
+      {_id: req.params.id},
+      {username: req.params.id},
+    ]
+  }).populate('ankiInfo').lean();
+  res.status(200).send(user.ankiInfo.heatmap);
+})
 
 
 module.exports = router;

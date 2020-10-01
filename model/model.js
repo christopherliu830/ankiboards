@@ -10,14 +10,16 @@ const ReviewEntrySchema = new Schema({
   factor : {type: Number},
   time : {type: Number},
   type : {type: Number},
-  userid : {type: Schema.Types.ObjectId, ref: 'UserModel', required: true}
 })
 module.exports.ReviewEntry = mongoose.model('ReviewEntry', ReviewEntrySchema);
 
 const AnkiInfoSchema = new Schema({
-  reviews: { type: Object },
+  revlog: {type: Object, default: []},
+  heatmap: { type: Object, default: {}},
   lastSynced: {type: Number, default: 0},
+  userid : {type: Schema.Types.ObjectId, ref: 'UserModel'},
 })
+module.exports.AnkiInfo = mongoose.model('AnkiInfo', AnkiInfoSchema);
 
 const UserSchema = new Schema({
   username: {
@@ -33,12 +35,7 @@ const UserSchema = new Schema({
     unique: true,
   },
   lastSynced: {type: Number},
-  ankiInfo: { 
-    type: Object, 
-    default: {
-      heatmap: {},
-    } 
-  },
+  ankiInfo: { type: Schema.Types.ObjectId, ref: 'AnkiInfo'}, 
 });
 
 module.exports.UserModel = mongoose.model('UserModel', UserSchema);
