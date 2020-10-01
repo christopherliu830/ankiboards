@@ -9,7 +9,6 @@ const oauthRouter = require('./routes/oauth');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const admin = require('firebase-admin');
-const OAuth2Server = require('express-oauth-server');
 
 require('dotenv').config();
 
@@ -26,9 +25,7 @@ mongoose.connect(`mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGOD
 mongoose.connection.on('error', error => console.log(error) );
 mongoose.Promise = global.Promise;
 
-app.oauth = new OAuth2Server({
-  model: require('./model/authcode')
-});
+oauthServer = require('./auth/server');
 
 // view engine setup
 corsOptions = {
@@ -45,9 +42,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/', oauthRouter);
 app.use('/', indexRouter);
 app.use('/', require('./auth/firebase-token'), secureRouter);
+app.use('/', oauthServer.authenticate(), oauthRouter);
+app.use('/oauth', oauthRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

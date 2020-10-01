@@ -35,10 +35,11 @@ router.post('/name-change', async (req, res, next) => {
   try {
     await admin.auth().getUser(req.user.firebaseUid, { displayName: req.body.username});
     req.user.username = req.body.username;
-    req.user.username_lower = req.body.username.toLowercase();
+    req.user.username_lower = req.body.username.toLowerCase();
     await req.user.save();
+    res.status(200).send({message: "Success"});
   } catch(e) {
-    res.status(500).send("Error changing display name!");
+    res.status(500).send({error: e.toString()});
   }
 })
 
