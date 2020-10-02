@@ -1,8 +1,9 @@
 
 const express = require('express');
 const mongoose = require('mongoose');
-const router = express.Router();
 const { AnkiInfo, ReviewEntry } = require('../model/model');
+
+const router = express.Router();
 
 router.use( async (req, res, next) => {
   // Put the user in body

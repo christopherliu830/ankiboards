@@ -10,6 +10,7 @@ const addonRouter = require('./routes/addon');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const admin = require('firebase-admin');
+const compression = require('compression');
 
 require('dotenv').config();
 
@@ -31,7 +32,8 @@ mongoose.connect(`mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGOD
 mongoose.connection.on('error', error => console.log(error) );
 mongoose.Promise = global.Promise;
 
-oauthServer = require('./auth/server');
+const oauthServer = require('./auth/server');
+
 
 // view engine setup
 corsOptions = {
@@ -48,6 +50,7 @@ app.use(express.json({limit: '5mb'}));
 app.use(express.urlencoded({ extended: false, limit: '5mb'}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(compression()) // compress responses
 app.use('/oauth', oauthRouter);
 app.use('/private', require('./auth/firebase-token'), secureRouter);
 app.use('/addon', oauthServer.authenticate(), addonRouter);
