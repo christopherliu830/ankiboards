@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import Row from 'react-bootstrap/Row';
 import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
@@ -10,7 +10,6 @@ import changeDisplayname from '../util/change-displayname';
 function ProfileSettingsPage(props) {
   const auth = useAuth();
   const [ ankiData , setAnkiData ] = useState();
-  const [ loading, setLoading ] = useState();
   const [ displayName, setDisplayName ] = useState('');
 
   useEffect(() => {

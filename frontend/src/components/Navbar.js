@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useHistory, Route, Switch, useLocation } from 'react-router-dom';
+import React from 'react';
+import { Link, useHistory} from 'react-router-dom';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import Button from 'react-bootstrap/Button';
-import Cookies from 'js-cookie';
 import { useAuth } from '../behaviors/use-auth';
 
-export default function({userId, onLogout}) {
+export default function() {
   const history = useHistory();
-  const [user, setUser] = useState(null);
   const auth = useAuth();
 
   const handleSignOut = e => {

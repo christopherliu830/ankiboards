@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Spinner from 'react-bootstrap/Spinner';
 
 export default function LoadingContainer(props) {

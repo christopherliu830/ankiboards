@@ -1,11 +1,10 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import { useHistory, useRouteMatch, Route, Router } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import LoadingButton from '../components/LoadingButton';
-import FormField from '../components/FormField';
 import { useAuth } from '../behaviors/use-auth';
 import { withLoading } from '../behaviors/with-loading';
 import qs from 'qs';
@@ -20,10 +19,9 @@ export default function(props) {
   useEffect(() => {
     if (auth.user) setPageLoaded(true);
     else if (auth.user === false) history.push(`/login?goBack=true`); // null means we don't know if they are signed in
-  }, [auth.user])
+  }, [auth.user, history])
 
   const sendClientData = async () => {
-    let clientData = {}
     const token = await auth.user.getIdToken();
     const response = await fetch(process.env.REACT_APP_API + '/user/add-client', {
       headers: { 'Authorization': `Bearer ${token}` }

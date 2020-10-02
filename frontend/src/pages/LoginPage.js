@@ -1,5 +1,5 @@
-import React, { useState, useCallback } from 'react';
-import { Link, useHistory, useParams } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useHistory } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -33,7 +33,7 @@ export default function() {
   const auth = useAuth();
   const history = useHistory();
 
-  const handleSubmit = useCallback(e => {
+  const handleSubmit = e => {
     e.preventDefault();
     setLoading(true);
     auth.signin(email.value, pword.value)
@@ -45,13 +45,14 @@ export default function() {
     .catch(err => {
       console.log(err);
       switch(err.code) {
-        case 'auth/invalid-email':
+        default:
           emailPair[1]({...email, error: err.message});
           break;
+          
       }
       setLoading(false);
     })
-  });
+  };
 
 
   return (

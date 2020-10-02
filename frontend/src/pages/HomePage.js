@@ -4,9 +4,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import LoadingButton from '../components/LoadingButton';
-import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
-import Spinner from 'react-bootstrap/Spinner';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 
@@ -14,7 +12,6 @@ export default function() {
   const [ loading, setLoading ] = useState(false);
   const [ suggestions, setSuggestions ] = useState([]);
   const [ selected, setSelected ] = useState([]);
-  const [ error, setError ] = useState('');
   const [ submitted, setSubmitted ] = useState(false);
   const history = useHistory();
   const el = useRef(null);
@@ -60,7 +57,6 @@ export default function() {
         setTimeout(() => {
           setSubmitted(false);
           if (data) history.push(`/user/${data._id}`);
-          else setError("User not found");
         }, 400);
       })
     }
@@ -91,49 +87,11 @@ export default function() {
               useCache={false}
             />
             <InputGroup.Append>
-              <LoadingButton loaded={!submitted} type="submit" variant={"dark"} style={{ minWidth:"80px" }}>
+              <LoadingButton loaded={!submitted} type="submit" variant={"dark"} onClick={handleSubmit} style={{ minWidth:"80px" }}>
                 Search
               </LoadingButton>
             </InputGroup.Append>
           </InputGroup>
-        </Col>
-      </Row>
-    </Container>
-  )
-  return (
-    <Container fluid className="h-50 d-flex flex-column align-items-center justify-content-center">
-      <Row><Col><h1>Ankiboards</h1></Col></Row>
-      <Row><Col><h4>Leaderboards for Anki</h4></Col></Row>
-      <Row className="py-5">
-        <Col>
-          <Form onSubmit={handleSubmit}>
-            <Form.Group>
-              {<Form.Text className="text-danger pb-3" style={{height:'2em'}}>{error ? error: ' '}{error && <br/>}</Form.Text>}
-              <InputGroup>
-                <AsyncTypeahead
-                  ref={el}
-                  id="User Search"
-                  delay={100}
-                  minLength={0}
-                  labelKey="username"
-                  isLoading={loading}
-                  onSearch={handleSearch}
-                  options={suggestions}
-                  onChange={(selected) => {setSelected(selected)}}
-                  onActiveItemChange={item => console.log(item)}
-                  selected={selected}
-                  placeholder="Search for a user..."
-                  onKeyDown={e => {if (e.key === 'Enter') handleSubmit(e)}}
-                  useCache={false}
-                />
-                <InputGroup.Append>
-                    <LoadingButton loaded={!submitted} type="submit" variant={"dark"} style={{ minWidth:"80px" }}>
-                      Search
-                    </LoadingButton>
-                </InputGroup.Append>
-              </InputGroup>
-            </Form.Group>
-          </Form>
         </Col>
       </Row>
     </Container>

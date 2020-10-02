@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import colormap from 'colormap';
 import Tooltip from 'react-bootstrap/Tooltip';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
@@ -43,7 +43,6 @@ const Year = React.memo((props) => {
       <div className="d-flex">
         <div className="d-flex year-chart" ref={ref}>
           {keys.map(month => {
-            const date = new Date(year, month);
             return <Month key={month} year={year} month={month} days={months[month]}/>
           })}
         </div>
@@ -122,7 +121,7 @@ export default function (props) {
     if (calendar) {
       ref.current.style.maxHeight = `${innerRef.current.scrollHeight/len}px`;
     }
-  }, [calendar])
+  }, [calendar, len])
 
   const handleClick = e => {
     if (expanded) {

@@ -1,10 +1,9 @@
-import React, { useState, useCallback } from 'react';
-import { Redirect, Link, useHistory } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useHistory } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
-import Collapse from 'react-bootstrap/Collapse';
 import LoadingButton from '../components/LoadingButton';
 import FormField from '../components/FormField';
 import { useAuth } from '../behaviors/use-auth';
@@ -58,13 +57,13 @@ export default function() {
 
   const signupRequest = async user => {
     setLoading(true);
+    if (secondPword.value !== pword.value) return secondPwordPair[1]({...secondPword, error: "Passwords don't match!"});
     const params = new URLSearchParams({
       username: username.value,
       password: pword.value,
       email: email.value,
     });
     const str = params.toString();
-    console.log(str);
     return fetch(process.env.REACT_APP_API + '/signup', {
       method: 'POST',
       headers: {
