@@ -17,10 +17,7 @@ require('dotenv').config();
 const app = express();
 
 // Initialise firebase admin tools
-admin.initializeApp({
-  credential: admin.credential.applicationDefault(),
-  databaseURL: process.env.FIREBASE_URL,
-})
+admin.initializeApp();
 
 //Connect to mongodb database
 mongoose.connect(`mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_KEY}@cluster0.0cef9.mongodb.net/${process.env.MONGODB_NAME}?retryWrites=true&w=majority`, { 
@@ -33,7 +30,6 @@ mongoose.connection.on('error', error => console.log(error) );
 mongoose.Promise = global.Promise;
 
 const oauthServer = require('./auth/server');
-
 
 // view engine setup
 corsOptions = {
