@@ -13,7 +13,7 @@ router.use( async (req, res, next) => {
 
 router.post('/sync/heatmap', async (req, res, next) => {
   try {
-    const ankiInfo = await AnkiInfo.findByIdAndUpdate(req.body.id, {
+    await AnkiInfo.findByIdAndUpdate(req.body.id, {
       heatmap: req.body.heatmap,
     }, {useFindAndModify: false});
     res.status(200).send("Success");
@@ -70,7 +70,7 @@ router.get('/meta', async (req, res, done) => {
     }
   } catch(e) {
     console.log(e);
-    res.sendStatus(500);
+    res.status(500).send({message: e.toString()});
   }
 })
 

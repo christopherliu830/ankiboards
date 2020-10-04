@@ -11,17 +11,21 @@ router.get('/profile', async (req, res, next) => {
 });
 
 router.get('/add-client', async (req, res, next) => {
-  const model = mongoose.model('OAuthClient');
-  if (req.user.client ) return res.status(200).send({clientId: req.user.client.id, clientSecret: req.user.client.secret});
+  const OAuthClientModel = mongoose.model('OAuthClient');
+  if (req.user.client) {
+    const client = await OAuthClientModel.findById(req.user.client).lean();
+    return res.status(200).send({ clientId: client.id, clientSecret: client.secret });
+  }
 
   const id = crypto.randomBytes(32).toString('hex');
   const secret = 'SECRET' + crypto.randomBytes(32).toString('hex');
-  const client = await model.create({
+  const client = await OAuthClientModel.create({
     id: id,
     secret: secret,
   });
-  req.user.client = client;
+  req.user.client = client._id;
   await req.user.save();
+
   res.status(201).send({clientId: id, clientSecret: secret});
 });
 

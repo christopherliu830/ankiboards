@@ -36,6 +36,7 @@ const UserSchema = new Schema({
   },
   lastSynced: {type: Number},
   ankiInfo: { type: Schema.Types.ObjectId, ref: 'AnkiInfo'}, 
+  client: { type: Schema.Types.ObjectId, ref: 'ClientModel'},
 });
 
 module.exports.UserModel = mongoose.model('UserModel', UserSchema);
