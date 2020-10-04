@@ -105,6 +105,7 @@ const InnerHeatmap = React.memo(React.forwardRef((props, ref) => {
 }));
 
 export default function (props) {
+  const { userId, ...other } = props;
   const ref = useRef();
   const innerRef = useRef();
   const [ expanded, setExpanded ] = useState(false);
@@ -112,10 +113,10 @@ export default function (props) {
   const len = calendar && Object.keys(calendar).length;
 
   useEffect(() => {
-    getHeatmap(props.userId).then(data => {
+    getHeatmap(userId).then(data => {
       setCalendar(data);
     });
-  }, [props.userId])
+  }, [userId])
 
   useEffect(() => {
     if (calendar) {
@@ -136,7 +137,7 @@ export default function (props) {
   const LoadingBody = withLoading(!!calendar)(InnerHeatmap);
 
   return (
-    <Card {...props} >
+    <Card {...other} >
       <Card.Header>Heatmap</Card.Header>
       <Card.Body className="d-flex flex-column heatmap-card-body">
         <div className="card-outer" ref={ref}>

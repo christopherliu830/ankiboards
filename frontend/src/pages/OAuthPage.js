@@ -22,17 +22,22 @@ export default function(props) {
   }, [auth.user, history])
 
   const sendClientData = async () => {
-    const token = await auth.user.getIdToken();
-    const response = await fetch(process.env.REACT_APP_API + '/user/add-client', {
-      headers: { 'Authorization': `Bearer ${token}` }
-    });
-    const data = await response.json();
-    const post = await fetch('http://localhost:9091', {
-      method: 'POST',
-      body: JSON.stringify(data),
-    })
-    if (!post.ok) throw Error("Getting Client Data failed")
-    else return data;
+    try {
+      const token = await auth.user.getIdToken();
+      const response = await fetch(process.env.REACT_APP_API + '/private/add-client', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (!response.ok) throw Error(response);
+      const data = await response.json();
+      const post = await fetch('http://localhost:9091', {
+        method: 'POST',
+        body: JSON.stringify(data),
+      })
+      if (!post.ok) throw Error("Getting Client Data failed")
+      return data;
+    } catch (e) {
+      console.log(e);
+    }
   }
   const handleSubmit = async e => {
     e.preventDefault();
@@ -47,11 +52,10 @@ export default function(props) {
       state: reqQuery.state,
       redirectUri: reqQuery.redirect,
     }).toString();
-    console.log(params);
-
 
     auth.user.getIdToken()
       .then(token => {
+        console.log(token);
         return fetch(process.env.REACT_APP_API + '/oauth/authorize', {
           method: 'POST',
           headers: { 
@@ -61,9 +65,7 @@ export default function(props) {
           body: params,
         })
       })
-      .then(response => {
-        return response.text();
-      })
+      .then(response => { return response; })
       .then(data => {
         if (data === 'Success') setSuccess(true);
         setLoading(false);

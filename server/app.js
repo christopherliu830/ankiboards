@@ -44,8 +44,8 @@ corsOptions = {
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 app.use(logger('dev'));
-app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));
+app.use(cors(corsOptions));
 app.use(express.json({limit: '5mb'}));
 app.use(express.urlencoded({ extended: false, limit: '5mb'}));
 app.use(cookieParser());
