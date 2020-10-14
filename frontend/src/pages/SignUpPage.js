@@ -57,7 +57,10 @@ export default function() {
 
   const signupRequest = async user => {
     setLoading(true);
-    if (secondPword.value !== pword.value) return secondPwordPair[1]({...secondPword, error: "Passwords don't match!"});
+    if (secondPword.value !== pword.value) {
+      setLoading(false);
+      return secondPwordPair[1]({...secondPword, error: "Passwords don't match!"});
+    }
     const params = new URLSearchParams({
       username: username.value,
       password: pword.value,
@@ -72,13 +75,14 @@ export default function() {
       body: str,
     })
     .then(data => {
-      console.log('Created');
       return auth.signin(email.value, pword.value);
     })
     .then(user => {
       history.push('/');
     })
-    .catch(err => err.json()).then(data => console.log(data))
+    .catch(err => {
+      console.log(err);
+    });
   }
 
   return (
