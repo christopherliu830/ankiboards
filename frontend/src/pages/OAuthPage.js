@@ -65,9 +65,8 @@ export default function(props) {
           body: params,
         })
       })
-      .then(response => { return response; })
-      .then(data => {
-        if (data === 'Success') setSuccess(true);
+      .then(response => {
+        if (response.ok) setSuccess(true);
         setLoading(false);
       })
       .catch(err => console.log(err));
