@@ -72,7 +72,12 @@ router.get('/meta', async (req, res, done) => {
     if (!req.user.ankiInfo) {
       const anki = await AnkiInfo.create({userid: req.user._id});
       req.user.ankiInfo = anki._id;
+      const body = {
+        id: anki._id,
+        lastSynced: anki.lastSynced,
+      }
       await req.user.save();
+      res.send(body);
     }
     else {
       await req.user.populate('ankiInfo').execPopulate();
