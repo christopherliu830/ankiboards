@@ -32,19 +32,23 @@ function useProvideAuth() {
 
   useEffect(() => {
     const unsubscribe = firebase.auth().onAuthStateChanged(user => {
-      if (user) setUser(user);
-      else setUser(false);
+      if (user) {
+        setUser(user);
+        getUid(user.displayName).then(uid => {
+          setUid(uid);
+        });
+      }
+      else {
+        setUser(false);
+        setUid(false);
+      };
     })
     return unsubscribe;
   }, []);
 
   const signin = (email, password) => {
     return firebase.auth().signInWithEmailAndPassword(email, password)
-      .then(response => {
-        setUser(response.user);
-        setUid(await getUid(response.user.displayName));
-        return response.user;
-      });
+      .then(response => response.user);
   };
 
   const signup = (email, password) => {
@@ -80,6 +84,7 @@ function useProvideAuth() {
 
   return {
     user,
+    ankiId,
     signin,
     signout,
     signup,

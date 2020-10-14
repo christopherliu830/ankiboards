@@ -3,7 +3,6 @@ import {Route, Switch } from 'react-router-dom';
 import * as pages from './pages';
 import Navbar from './components/Navbar';
 import './App.css';
-import { getUid } from '../util/apicalls';
 
 function App() {
 

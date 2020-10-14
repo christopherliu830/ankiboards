@@ -24,7 +24,9 @@ export default function() {
         activeKey={history.location.pathname} 
       >
         <Nav.Item>
-          <Nav.Link as={Link} to="/me" eventKey="/me">My Page</Nav.Link>
+          {auth.user && <Nav.Link as={Link} to={`/user/${auth.ankiId}`} eventKey="/me">My Page</Nav.Link> }
+        </Nav.Item>
+        <Nav.Item>
           <Nav.Link as={Link} to="/about" eventKey="/about">About</Nav.Link>
         </Nav.Item>
       </Nav>
