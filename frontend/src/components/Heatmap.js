@@ -72,8 +72,6 @@ const Month = React.memo((props) => {
         {keys.map(day => {
           return <div 
             data-tip={`${new Date(year, month-1, day, 0, 0, 0, 0).toDateString()} : ${days[day]} reviews`}
-            rel="popover"
-            data-trigger="hover"
             key={day} 
             className="heatmap-square" 
             style={{background: getColorIndex(days[day])}}

@@ -1,4 +1,14 @@
 
 .bar-graph-card {
   max-width: 600px;
+  overflow: hidden;
+}
+
+.bar-tooltip {
+  color: #fff;
+  background: #222;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  text-align: center;
+  padding: 0px 30px;
 }
