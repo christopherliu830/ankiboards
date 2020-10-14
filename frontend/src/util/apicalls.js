@@ -33,7 +33,7 @@ export function getProfileData(uid) {
 }
 
 export function getRevlog(uid) {
-  return fetch(process.env.REACT_APP_API + `/user/${uid}/revlog`)
+  return fetch(process.env.REACT_APP_API + `/user/${uid}/byHour`)
     .then( response => {
       if (!response.ok) throw Error("Error getting revlog");
       return response.json();

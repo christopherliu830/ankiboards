@@ -7,6 +7,7 @@ import Button from 'react-bootstrap/Button';
 import { ArrowDownCircle, ArrowUpCircle } from 'react-feather';
 import { getHeatmap } from '../util/apicalls';
 import { withLoading } from '../behaviors/with-loading';
+import ReactTooltip from 'react-tooltip';
 import './Heatmap.css';
 
 const colors = colormap({
@@ -57,7 +58,7 @@ const Month = React.memo((props) => {
 
   const padding = [];
   if (keys.length > 0) {
-    const daysToPad = new Date(year, month, keys[0]).getDay();
+    const daysToPad = new Date(year, month-1, keys[0]).getDay();
     for (let i = 0; i < daysToPad; i++) {
       padding.push(<div key={-i} className="heatmap-square"/>);
     }
@@ -69,25 +70,14 @@ const Month = React.memo((props) => {
       <div className="month">
         {padding}
         {keys.map(day => {
-          // return <div 
-          //   data-content="Popup" 
-          //   data-toggle="popover"
-          //   rel="popover"
-          //   data-trigger="hover"
-          //   key={day} 
-          //   className="heatmap-square" 
-          //   style={{background: getColorIndex(days[day])}}
-          // />
-          return <OverlayTrigger
-            key={day}
-            overlay={
-              <Tooltip className="loadedTest">
-                {new Date(year, month, day).toDateString()} : {`${days[day]} reviews`}
-              </Tooltip>
-            }
-          >
-            <div key={day} className="heatmap-square" style={{background: getColorIndex(days[day])}}/>
-          </OverlayTrigger>
+          return <div 
+            data-tip={`${new Date(year, month-1, day, 0, 0, 0, 0).toDateString()} : ${days[day]} reviews`}
+            rel="popover"
+            data-trigger="hover"
+            key={day} 
+            className="heatmap-square" 
+            style={{background: getColorIndex(days[day])}}
+          />
         })}
       </div>
     </div>
@@ -99,6 +89,7 @@ const InnerHeatmap = React.memo(React.forwardRef((props, ref) => {
   const years = Object.keys(calendar);
   return (
     <div className="card-inner-inner" ref={ref}>
+      <div><p data-tip="test">testo</p></div>
       {years && years.map(key => (<Year key={key} year={key} months={calendar[key]}/>))}
     </div>
   )
@@ -120,6 +111,7 @@ export default function (props) {
 
   useEffect(() => {
     if (calendar) {
+      ReactTooltip.rebuild();
       ref.current.style.maxHeight = `${innerRef.current.scrollHeight/len}px`;
     }
   }, [calendar, len])
@@ -134,19 +126,21 @@ export default function (props) {
     setExpanded(!expanded);
   };
 
-  const LoadingBody = withLoading(!!calendar)(InnerHeatmap);
+  console.log(!!calendar);
+  const LoadingBody = withLoading(!!calendar)("div");
 
   return (
     <Card {...other} >
       <Card.Header>Heatmap</Card.Header>
       <Card.Body className="d-flex flex-column heatmap-card-body">
         <div className="card-outer" ref={ref}>
-          {calendar && <LoadingBody calendar={calendar} ref={innerRef}/> }
+          {calendar && <InnerHeatmap calendar={calendar} ref={innerRef}/> }
         </div>
         <Button variant="circle" onClick={handleClick}>
           {expanded? <ArrowUpCircle/> : <ArrowDownCircle/> }
         </Button>
       </Card.Body>
+      <ReactTooltip/>
     </Card>
   )
 }

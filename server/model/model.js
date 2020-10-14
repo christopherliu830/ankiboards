@@ -14,9 +14,10 @@ const ReviewEntrySchema = new Schema({
 module.exports.ReviewEntry = mongoose.model('ReviewEntry', ReviewEntrySchema);
 
 const AnkiInfoSchema = new Schema({
-  revlog: {type: Object, default: []},
   heatmap: { type: Object, default: {}},
+  byHour: { type: Array, default: []},
   lastSynced: {type: Number, default: 0},
+  count: {type: Number, default: 0},
   userid : {type: Schema.Types.ObjectId, ref: 'UserModel'},
 })
 module.exports.AnkiInfo = mongoose.model('AnkiInfo', AnkiInfoSchema);
