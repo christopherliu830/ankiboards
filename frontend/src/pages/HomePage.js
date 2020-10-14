@@ -54,10 +54,8 @@ export default function() {
       })
       .then(response => response.ok && response.json())
       .then(data => {
-        setTimeout(() => {
-          setSubmitted(false);
-          if (data) history.push(`/user/${data._id}`);
-        }, 400);
+        setSubmitted(false);
+        if (data) history.push(`/user/${data._id}`);
       })
     }
     else history.push(`/user/${el.current.state.activeItem._id}`);

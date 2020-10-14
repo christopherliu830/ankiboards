@@ -8,6 +8,21 @@ export function getHeatmap(uid) {
     .catch(err => console.log(err))
 }
 
+export function getUid(username) {
+  return fetch(process.env.REACT_APP_API + '/search-by-username', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({query : username})
+  })
+  .then(response => response.ok && response.json())
+  .then(data => {
+    if (!data) throw Error();
+    return data._id;
+  })
+}
+
 export function getProfileData(uid) {
   return fetch(process.env.REACT_APP_API + `/user/${uid}`)
     .then( response => {

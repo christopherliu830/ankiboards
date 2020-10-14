@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext, createContext } from 'react';
+import { getUid } from '../util/apicalls';
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
 
@@ -27,6 +28,7 @@ export const useAuth = () => {
 
 function useProvideAuth() {
   const [ user, setUser ] = useState(null);
+  const [ ankiId, setUid ] = useState(null);
 
   useEffect(() => {
     const unsubscribe = firebase.auth().onAuthStateChanged(user => {
@@ -40,6 +42,7 @@ function useProvideAuth() {
     return firebase.auth().signInWithEmailAndPassword(email, password)
       .then(response => {
         setUser(response.user);
+        setUid(await getUid(response.user.displayName));
         return response.user;
       });
   };
