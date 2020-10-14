@@ -29,6 +29,7 @@ router.post('/signup', async (req, res, next) => {
     res.status(201).send();
 
   } catch (e) {
+    console.log(e);
     return res.status(500).send(e);
   }
 });
