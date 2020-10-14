@@ -13,10 +13,11 @@ router.use( async (req, res, next) => {
 
 router.post('/sync', async (req, res, next) => {
   try {
-    console.log(req.body.byHour);
+    console.log(req.body.count);
     await AnkiInfo.findByIdAndUpdate(req.body.id, {
       heatmap: req.body.heatmap,
       byHour: req.body.byHour,
+      count: req.body.count,
     }, {useFindAndModify: false});
     res.status(200).send("Success");
   } catch (e) {

@@ -11,19 +11,19 @@ import { getProfileData } from '../util/apicalls';
 export default function ({ match }) {
   const params = useParams();
   const queryId = params.id;
-  const [ userData, setUserData ] = useState({ username: null });
+  const [ userData, setUserData ] = useState(null);
 
   useEffect(() => {
-    getProfileData(queryId).then(data => setUserData({username: data.username}));
+    getProfileData(queryId).then(data => setUserData(data));
   }, [queryId]);
 
-  const UsernameCol = withLoading(userData.username, {left: true})(Col)
+  const UsernameCol = withLoading(userData, {left: true})(Col)
 
   return ( 
     <Container fluid className="h-100 mx-auto my-5">
       <Row className="m-2">
         <UsernameCol>
-        <h1>{userData && userData.username}</h1>
+        <h1>{userData && `${userData.username} - ${userData.reviewsLogged} Reviews Logged`}</h1>
         </UsernameCol>
       </Row>
       <Row>
