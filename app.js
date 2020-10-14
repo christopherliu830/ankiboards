@@ -16,7 +16,7 @@ require('dotenv').config();
 
 const app = express();
 
-console.log(process.env.FIREBASE_PRIVATE_KEY);
+console.log(process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'));
 // Initialise firebase admin tools
 admin.initializeApp({
   credential: admin.credential.cert({
