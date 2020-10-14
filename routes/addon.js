@@ -11,6 +11,20 @@ router.use( async (req, res, next) => {
   next();
 })
 
+router.post('/sync', async (req, res, next) => {
+  try {
+    console.log(req.body.byHour);
+    await AnkiInfo.findByIdAndUpdate(req.body.id, {
+      heatmap: req.body.heatmap,
+      byHour: req.body.byHour,
+    }, {useFindAndModify: false});
+    res.status(200).send("Success");
+  } catch (e) {
+    console.log(e);
+    res.status(500).send({error: e.toString()});
+  }
+});
+
 router.post('/sync/heatmap', async (req, res, next) => {
   try {
     await AnkiInfo.findByIdAndUpdate(req.body.id, {
@@ -42,7 +56,7 @@ router.post('/sync/revlog', async(req, res, next) => {
       },
       lastSynced: reviews[reviews.length-1].id,
     }, {upsert: true, useFindAndModify: false})
-    console.log(a.revlog.length, req.body.revlog.length);
+    a.
 
     res.status(200).send("Success");
   } catch (e) {

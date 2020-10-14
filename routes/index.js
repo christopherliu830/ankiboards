@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const admin = require('firebase-admin');
-const {UserModel, ReviewEntry }= require('../model/model');
+const {UserModel, ReviewEntry, AnkiInfo }= require('../model/model');
 
 /* GET home page. */
 router.get('/', function(req, res) {
@@ -60,23 +60,14 @@ router.get('/user/:id', async (req, res, next) => {
 });
 
 router.get('/user/:id/heatmap', async (req, res, next) => {
-  const user = await UserModel.findOne({
-    $or: [
-      {_id: req.params.id},
-      {username: req.params.id},
-    ]
-  }).populate('ankiInfo').lean();
-  res.status(200).send(user.ankiInfo.heatmap);
+  const user = await UserModel.findById(req.params.id).lean();
+  const ankiInfo = await AnkiInfo.findById(user.ankiInfo).lean();
+  res.status(200).send(ankiInfo.heatmap);
 })
 
-router.get('/user/:id/revlog', async (req, res, next) => {
-  const user = await UserModel.findOne({
-    $or: [
-      {_id: req.params.id},
-      {username: req.params.id},
-    ]
-  }).populate('ankiInfo').lean();
-  res.status(200).send(user.ankiInfo.revlog);
+router.get('/user/:id/byHour', async (req, res, next) => {
+  const user = await UserModel.findById(req.params.id).populate('ankiInfo').lean();
+  res.status(200).send(user.ankiInfo.byHour);
 })
 
 
