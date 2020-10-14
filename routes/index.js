@@ -50,13 +50,8 @@ router.post('/search-by-username', (req, res, next) => {
 });
 
 router.get('/user/:id', async (req, res, next) => {
-  const user = await UserModel.findOne({
-    $or: [
-      {_id: req.params.id},
-      {username: req.params.id},
-    ]
-  }).lean();
-  res.status(200).send({username: user.username});
+  const user = await UserModel.findById(req.params.id).populate('ankiInfo').lean();
+  res.status(200).send({username: user.username, reviewsLogged: user.ankiInfo.count});
 });
 
 router.get('/user/:id/heatmap', async (req, res, next) => {
